@@ -389,21 +389,155 @@ document.getElementById('csvFileInput').addEventListener('change',function(e){
   reader.readAsText(file,'UTF-8');
 });
 
-// ── FETCH CSV (GitHub Pages mode) ────────────────────────────────
-async function loadCSV(){
-  try{
-    const r=await fetch('dados_fcx.csv');
-    if(!r.ok)throw new Error('CSV não encontrado');
-    const text=await r.text();
-    const rows=parseCSV(text);
-    ALL=processRows(rows);
-    document.getElementById('periodBadge').textContent='Mar – Jun 2026';
-  }catch(e){
-    // fallback: show empty state with upload prompt
-    ALL=[];
-    document.getElementById('periodBadge').textContent='Sem dados';
-    console.warn('CSV não carregado via fetch:',e.message);
-  }
+const FALLBACK_DATA = [
+  {num:1,canal:'INSTAGRAM',marca:'FCX CONSULTORIA',tarefa:'Acesso — login e senha',obs:'Configurar acesso compartilhado',resp:'Ronaldo F.',p:1.0,ini:'02/03/2026',fim:'06/03/2026'},
+  {num:2,canal:'INSTAGRAM',marca:'FCX CONSULTORIA',tarefa:'Bio — descrição do perfil',obs:'Texto, link e emojis',resp:'Ronaldo F.',p:1.0,ini:'02/03/2026',fim:'13/03/2026'},
+  {num:3,canal:'INSTAGRAM',marca:'FCX CONSULTORIA',tarefa:'Linktree — criação e links',obs:'Aguardando aprovação do Ronaldo Ferreira',resp:'Ronaldo F.',p:0.9,ini:'09/03/2026',fim:'20/03/2026'},
+  {num:4,canal:'INSTAGRAM',marca:'FCX CONSULTORIA',tarefa:'Destaques — Vitrine & Branding',obs:'Capas padronizadas por categoria. Aguardando aprovação do Ronaldo Ferreira',resp:'Ronaldo F.',p:0.9,ini:'16/03/2026',fim:'20/03/2026'},
+  {num:5,canal:'INSTAGRAM',marca:'FCX CONSULTORIA',tarefa:'Feed — Quem somos (Carrossel/Vídeo)',obs:'Apresentação institucional',resp:'Ronaldo F.',p:1.0,ini:'02/02/2026',fim:'06/03/2026'},
+  {num:6,canal:'INSTAGRAM',marca:'FCX CONSULTORIA',tarefa:'Feed — O que fazemos (Serviços)',obs:'RCT ADM / PTA / RCT JUD / APT / Holding / M&A. Aguardando aprovação do Ronaldo Ferreira',resp:'Ronaldo F.',p:0.9,ini:'02/02/2026',fim:'20/03/2026'},
+  {num:7,canal:'INSTAGRAM',marca:'FCX CONSULTORIA',tarefa:'Feed — Benefícios',obs:'Carrossel / Vídeo. Beneficios de cada Int. Consultiva. Aguardando aprovação do Ronaldo Ferreira',resp:'Ronaldo F.',p:0.9,ini:'02/02/2026',fim:'20/03/2026'},
+  {num:8,canal:'INSTAGRAM',marca:'FCX CONSULTORIA',tarefa:'Feed — Resultados (Cases)',obs:'Carrossel / Vídeo com dados reais',resp:'Ronaldo F.',p:0.0,ini:'02/02/2026',fim:'31/03/2026'},
+  {num:9,canal:'INSTAGRAM',marca:'FCX CONSULTORIA',tarefa:'Valorizando a Nossa Casa',obs:'Conteúdo de cultura interna',resp:'Ronaldo F.',p:0.0,ini:'02/02/2026',fim:'30/04/2026'},
+  {num:10,canal:'INSTAGRAM',marca:'FCX CONSULTORIA',tarefa:'Percepção de Mercado — Nutrição Relacionamento',obs:'Interações e comentários',resp:'Ronaldo F.',p:0.0,ini:'02/02/2026',fim:'30/04/2026'},
+  {num:11,canal:'INSTAGRAM',marca:'FCX CONSULTORIA',tarefa:'Caixa de Perguntas (Engajamento)',obs:'Stories interativos semanais. Incluir destaques',resp:'Ronaldo F.',p:0.0,ini:'02/02/2026',fim:'30/04/2026'},
+  {num:12,canal:'INSTAGRAM',marca:'CONTABILIDADE ALAVANCADA',tarefa:'Acesso — login e senha',obs:'Configurar acesso compartilhado',resp:'Ronaldo F.',p:1.0,ini:'02/03/2026',fim:'06/03/2026'},
+  {num:13,canal:'INSTAGRAM',marca:'CONTABILIDADE ALAVANCADA',tarefa:'Bio e Linktree',obs:'Atualizar texto e links',resp:'Ronaldo F.',p:1.0,ini:'02/03/2026',fim:'13/03/2026'},
+  {num:14,canal:'INSTAGRAM',marca:'CONTABILIDADE ALAVANCADA',tarefa:'Destaques — Vitrine & Branding',obs:'Capas padronizadas. Aguardando aprovação do Ronaldo Ferreira',resp:'Ronaldo F.',p:0.9,ini:'16/03/2026',fim:'31/03/2026'},
+  {num:15,canal:'INSTAGRAM',marca:'CONTABILIDADE ALAVANCADA',tarefa:'Feed — Conteúdo completo (5 posts)',obs:'Quem somos, Serviços, Benefícios, Cases, Resultados',resp:'Ronaldo F.',p:0.7,ini:'16/03/2026',fim:'31/03/2026'},
+  {num:16,canal:'INSTAGRAM',marca:'CONTABILIDADE ALAVANCADA',tarefa:'Nutrição e Engajamento',obs:'Percepção de mercado + Caixa de perguntas',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/04/2026'},
+  {num:17,canal:'INSTAGRAM',marca:'RONALDO FCX',tarefa:'Acesso e configuração inicial',obs:'Login + bio + linktree',resp:'Ronaldo F.',p:1.0,ini:'02/02/2026',fim:'06/03/2026'},
+  {num:18,canal:'INSTAGRAM',marca:'RONALDO FCX',tarefa:'Feed — Conteúdo Thought Leadership (5 posts)',obs:'Posicionar Ronaldo como especialista - Ação semanal continua',resp:'Ronaldo F.',p:0.7,ini:'02/02/2026',fim:'31/03/2026'},
+  {num:19,canal:'INSTAGRAM',marca:'RONALDO FCX',tarefa:'Nutrição e Engajamento',obs:'Interações diárias',resp:'Ronaldo F.',p:0.0,ini:'23/03/2026',fim:'30/04/2026'},
+  {num:20,canal:'INSTAGRAM',marca:'SUPERMERCADO ALAVANCADO',tarefa:'Acesso — login e senha',obs:'Configurar acesso',resp:'Ronaldo F.',p:1.0,ini:'02/03/2026',fim:'06/03/2026'},
+  {num:21,canal:'INSTAGRAM',marca:'SUPERMERCADO ALAVANCADO',tarefa:'Feed e Destaques completos',obs:'Bio, destaques, 5 posts',resp:'Ronaldo F.',p:0.5,ini:'16/03/2026',fim:'31/03/2026'},
+  {num:22,canal:'INSTAGRAM',marca:'SUPERMERCADO ALAVANCADO',tarefa:'Nutrição e Engajamento',obs:'Percepção de mercado',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/04/2026'},
+  {num:23,canal:'INSTAGRAM',marca:'FCX ADV',tarefa:'Acesso e setup completo',obs:'Login + bio + linktree + destaques',resp:'Ronaldo F.',p:0.15,ini:'09/03/2026',fim:'31/03/2026'},
+  {num:24,canal:'INSTAGRAM',marca:'FCX ADV',tarefa:'Feed — Conteúdo completo (5 posts)',obs:'Especialidades jurídicas FCX - Postagens diárias. Ação continua',resp:'Ronaldo F.',p:0.3,ini:'23/03/2026',fim:'31/03/2026'},
+  {num:25,canal:'INSTAGRAM',marca:'FCX ADV',tarefa:'Nutrição e Engajamento',obs:'Interações mensais',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/04/2026'},
+  {num:26,canal:'INSTAGRAM',marca:'FCX USA',tarefa:'Acesso e configuração do perfil',obs:'Setup completo bilíngue',resp:'Ronaldo F.',p:1.0,ini:'02/03/2026',fim:'09/03/2026'},
+  {num:27,canal:'INSTAGRAM',marca:'FCX USA',tarefa:'Feed — Conteúdo Bilíngue (5 posts)',obs:'PT-BR e EN — Serviços, Cases, Benefícios',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/04/2026'},
+  {num:28,canal:'INSTAGRAM',marca:'FCX USA',tarefa:'Nutrição e Engajamento',obs:'Foco no público norte-americano',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/04/2026'},
+  {num:29,canal:'FACEBOOK',marca:'FCX CONSULTORIA',tarefa:'Acesso e configuração da página',obs:'Admin, bio, links, foto de capa',resp:'Ronaldo F.',p:1.0,ini:'09/03/2026',fim:'20/03/2026'},
+  {num:30,canal:'FACEBOOK',marca:'FCX CONSULTORIA',tarefa:'Feed — Conteúdo espelhado do Instagram (5 posts)',obs:'Reaproveitamento de conteúdo - à confirmar',resp:'Ronaldo F.',p:0.0,ini:'23/03/2026',fim:'31/03/2026'},
+  {num:31,canal:'FACEBOOK',marca:'CONTABILIDADE ALAVANCADA',tarefa:'Setup e conteúdo completo',obs:'Espelho Instagram',resp:'Ronaldo F.',p:0.0,ini:'23/03/2026',fim:'30/04/2026'},
+  {num:32,canal:'FACEBOOK',marca:'RONALDO FCX',tarefa:'Setup e conteúdo thought leadership',obs:'Posts de autoridade',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'01/05/2026'},
+  {num:33,canal:'FACEBOOK',marca:'SUPERMERCADO ALAVANCADO',tarefa:'Setup e conteúdo completo',obs:'Espelho Instagram',resp:'Ronaldo F.',p:0.0,ini:'23/03/2026',fim:'30/04/2026'},
+  {num:34,canal:'FACEBOOK',marca:'FCX ADV',tarefa:'Setup e conteúdo jurídico',obs:'Especialidades legais',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'01/05/2026'},
+  {num:35,canal:'FACEBOOK',marca:'FCX USA',tarefa:'Setup bilíngue e conteúdo',obs:'PT-BR e EN',resp:'Ronaldo F.',p:0.0,ini:'13/04/2026',fim:'29/05/2026'},
+  {num:36,canal:'LINKEDIN',marca:'FCX CONSULTORIA',tarefa:'Acesso e configuração da página empresarial',obs:'Admin, banner, about, especialidades',resp:'Ronaldo F.',p:1.0,ini:'02/02/2026',fim:'06/03/2026'},
+  {num:37,canal:'LINKEDIN',marca:'FCX CONSULTORIA',tarefa:'Conteúdo — Feed B2B (5 posts)',obs:'Autoridade, cases, dados de mercado',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/04/2026'},
+  {num:38,canal:'LINKEDIN',marca:'FCX CONSULTORIA',tarefa:'Rotina de publicação semanal',obs:'Mín. 2x/semana — artigos e insights',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/04/2026'},
+  {num:39,canal:'LINKEDIN',marca:'CONTABILIDADE ALAVANCADA',tarefa:'Setup e conteúdo B2B',obs:'Direcionado a contadores e empresas',resp:'Ronaldo F.',p:0.0,ini:'23/03/2026',fim:'01/05/2026'},
+  {num:40,canal:'LINKEDIN',marca:'RONALDO FCX',tarefa:'Perfil pessoal — thought leadership',obs:'2 posts/semana — posicionamento de especialista',resp:'Ronaldo F.',p:0.0,ini:'09/03/2026',fim:'30/06/2026'},
+  {num:41,canal:'LINKEDIN',marca:'SUPERMERCADO ALAVANCADO',tarefa:'Setup e conteúdo segmento varejo',obs:'',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'15/05/2026'},
+  {num:42,canal:'LINKEDIN',marca:'FCX ADV',tarefa:'Setup e conteúdo jurídico',obs:'',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'15/05/2026'},
+  {num:43,canal:'LINKEDIN',marca:'FCX USA',tarefa:'Setup bilíngue e conteúdo internacional',obs:'EN + PT-BR',resp:'Ronaldo F.',p:0.0,ini:'13/04/2026',fim:'29/05/2026'},
+  {num:44,canal:'INTRANET (SHAREPOINT)',marca:'ARTES',tarefa:'Criar biblioteca de artes no SharePoint',obs:'Templates, logos, ícones, paleta de cores',resp:'Ronaldo F.',p:0.0,ini:'09/03/2026',fim:'31/03/2026'},
+  {num:45,canal:'INTRANET (SHAREPOINT)',marca:'ARTES',tarefa:'Organizar artes por marca (FCX / ContAl / Superm / ADV / USA)',obs:'Estrutura de pastas padronizada',resp:'Ronaldo F.',p:0.0,ini:'16/03/2026',fim:'10/04/2026'},
+  {num:46,canal:'INTRANET (SHAREPOINT)',marca:'BANNERS',tarefa:'Criar banners digitais — todos os tamanhos',obs:'Feed, stories, LinkedIn, site',resp:'Ronaldo F.',p:0.0,ini:'16/03/2026',fim:'10/04/2026'},
+  {num:47,canal:'INTRANET (SHAREPOINT)',marca:'BANNERS',tarefa:'Criar banners impressos — eventos e feiras',obs:'Roll-up, mesa, backdrop',resp:'Ronaldo F.',p:0.0,ini:'23/03/2026',fim:'24/04/2026'},
+  {num:48,canal:'INTRANET (SHAREPOINT)',marca:'VÍDEOS',tarefa:'Estruturar repositório de vídeos no SharePoint',obs:'Categorias: institucional, serviços, depoimentos',resp:'Ronaldo F.',p:0.0,ini:'09/03/2026',fim:'31/03/2026'},
+  {num:49,canal:'INTRANET (SHAREPOINT)',marca:'VÍDEOS',tarefa:'Produzir vídeos institucionais (mín. 3)',obs:'Quem somos, Serviços, Cases',resp:'Ronaldo F.',p:0.0,ini:'23/03/2026',fim:'01/05/2026'},
+  {num:50,canal:'INTRANET (SHAREPOINT)',marca:'MATÉRIAS / ARTIGOS',tarefa:'Criar calendário editorial trimestral',obs:'Temas: Tributário, Financeiro, Holding, Reforma',resp:'Ronaldo F.',p:0.0,ini:'09/03/2026',fim:'20/03/2026'},
+  {num:51,canal:'INTRANET (SHAREPOINT)',marca:'MATÉRIAS / ARTIGOS',tarefa:'Produzir e publicar 6 artigos educativos (mar–jun)',obs:'Mín. 1 por quinzena',resp:'Ronaldo F.',p:0.0,ini:'16/03/2026',fim:'30/06/2026'},
+  {num:52,canal:'SITE',marca:'FCX CONSULTORIA',tarefa:'Auditoria e levantamento de melhorias do site atual',obs:'SEO, velocidade, mobile, conteúdo',resp:'Ronaldo F.',p:0.0,ini:'09/03/2026',fim:'20/03/2026'},
+  {num:53,canal:'SITE',marca:'FCX CONSULTORIA',tarefa:'Atualizar página Sobre Nós — sócios e história',obs:'Fotos e bio dos sócios',resp:'Ronaldo F.',p:0.0,ini:'23/03/2026',fim:'10/04/2026'},
+  {num:54,canal:'SITE',marca:'FCX CONSULTORIA',tarefa:'Criar página de Cases e Resultados',obs:'Com dados e depoimentos reais',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/04/2026'},
+  {num:55,canal:'SITE',marca:'FCX CONSULTORIA',tarefa:'Implementar pop-up de captura de leads (diagnóstico gratuito)',obs:'Integração com CRM',resp:'Ronaldo F.',p:0.0,ini:'13/04/2026',fim:'01/05/2026'},
+  {num:56,canal:'SITE',marca:'FCX CONSULTORIA',tarefa:'Otimização de SEO On-Page',obs:'Palavras-chave: tributário, financeiro, holding, reforma',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'29/05/2026'},
+  {num:57,canal:'SITE',marca:'RONALDO FCX',tarefa:'Criar página pessoal de autoridade',obs:'Bio, palestras, artigos, contato',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/04/2026'},
+  {num:58,canal:'SITE',marca:'FCX ADV',tarefa:'Criar ou revisar página FCX ADV',obs:'Serviços jurídicos, equipe, contato',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'01/05/2026'},
+  {num:59,canal:'SITE',marca:'FCX USA',tarefa:'Comprar domínios fcx-bc.com e fcxus.com',obs:'Aguardando pagamento — prioridade alta',resp:'Ronaldo F.',p:0.0,ini:'02/03/2026',fim:'13/03/2026'},
+  {num:60,canal:'SITE',marca:'FCX USA',tarefa:'Estruturar site FCX USA bilíngue (EN + PT-BR)',obs:'Serviços, quem somos, contato USA',resp:'Ronaldo F.',p:0.0,ini:'16/03/2026',fim:'29/05/2026'},
+  {num:61,canal:'LANDING PAGE',marca:'CONTABILIDADE ALAVANCADA',tarefa:'Criar landing page de conversão',obs:'Headline, prova social, CTA, formulário',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/04/2026'},
+  {num:62,canal:'LANDING PAGE',marca:'CONTABILIDADE ALAVANCADA',tarefa:'Integrar LP ao CRM e WhatsApp',obs:'Automação de follow-up',resp:'Ronaldo F.',p:0.0,ini:'24/04/2026',fim:'15/05/2026'},
+  {num:63,canal:'LANDING PAGE',marca:'SUPERMERCADO ALAVANCADO',tarefa:'Criar landing page de conversão — varejo',obs:'Resultados específicos do segmento',resp:'Ronaldo F.',p:0.0,ini:'13/04/2026',fim:'09/05/2026'},
+  {num:64,canal:'LANDING PAGE',marca:'SUPERMERCADO ALAVANCADO',tarefa:'Integrar LP ao CRM',obs:'',resp:'Ronaldo F.',p:0.0,ini:'04/05/2026',fim:'22/05/2026'},
+  {num:65,canal:'LANDING PAGE',marca:'INDÚSTRIA ALAVANCADA',tarefa:'Criar landing page de conversão — indústria',obs:'Resultados para indústrias e manufatura',resp:'Ronaldo F.',p:0.0,ini:'04/05/2026',fim:'29/05/2026'},
+  {num:66,canal:'LANDING PAGE',marca:'INDÚSTRIA ALAVANCADA',tarefa:'Integrar LP ao CRM',obs:'',resp:'Ronaldo F.',p:0.0,ini:'18/05/2026',fim:'05/06/2026'},
+  {num:67,canal:'GOOGLE ADS',marca:'FCX CONSULTORIA',tarefa:'Criar conta Google Ads e configurar acesso',obs:'MCC e tag de conversão no site',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'10/04/2026'},
+  {num:68,canal:'GOOGLE ADS',marca:'FCX CONSULTORIA',tarefa:'Pesquisa de palavras-chave — tributário / financeiro',obs:'Ferramentas: Keyword Planner + SEMrush',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'17/04/2026'},
+  {num:69,canal:'GOOGLE ADS',marca:'FCX CONSULTORIA',tarefa:'Criar campanha Search — FCX Consultoria',obs:'Palavras-chave: recuperação tributária, holding, reforma',resp:'Ronaldo F.',p:0.0,ini:'13/04/2026',fim:'30/04/2026'},
+  {num:70,canal:'GOOGLE ADS',marca:'CONTABILIDADE ALAVANCADA',tarefa:'Criar campanha Search — Contabilidade Alavancada',obs:'Segmentação: contadores e pequenas empresas',resp:'Ronaldo F.',p:0.0,ini:'24/04/2026',fim:'15/05/2026'},
+  {num:71,canal:'GOOGLE ADS',marca:'SUPERMERCADO ALAVANCADO',tarefa:'Criar campanha Search — Supermercado Alavancado',obs:'Segmentação: varejo e distribuidoras',resp:'Ronaldo F.',p:0.0,ini:'04/05/2026',fim:'22/05/2026'},
+  {num:72,canal:'GOOGLE ADS',marca:'INDÚSTRIA ALAVANCADA',tarefa:'Criar campanha Search — Indústria',obs:'Segmentação: indústrias e manufatura',resp:'Ronaldo F.',p:0.0,ini:'18/05/2026',fim:'05/06/2026'},
+  {num:73,canal:'GOOGLE ADS',marca:'FCX ADV',tarefa:'Criar campanha Search — FCX ADV',obs:'Segmentação: empresas com passivos fiscais',resp:'Ronaldo F.',p:0.0,ini:'18/05/2026',fim:'05/06/2026'},
+  {num:74,canal:'GOOGLE ADS',marca:'Acompanhamento',tarefa:'Relatório mensal de performance e otimização',obs:'CTR, CPC, conversões, ROAS',resp:'Ronaldo F.',p:0.0,ini:'01/05/2026',fim:'30/06/2026'},
+  {num:75,canal:'LIVES E WEBINARS',marca:'FCX CONSULTORIA',tarefa:'Semana Compensações Indevidas (Live série 4 episódios)',obs:'Temas: Títulos, Precatórios, Créditos Terceiros, Reporto, ICMS',resp:'Ronaldo F.',p:0.0,ini:'30/03/2026',fim:'17/04/2026'},
+  {num:76,canal:'LIVES E WEBINARS',marca:'FCX CONSULTORIA',tarefa:'Semana Jurídica (Live série 4 episódios)',obs:'Transações, Penhoras, IAS, Liminar Simples, DIFAL',resp:'Ronaldo F.',p:0.0,ini:'20/04/2026',fim:'08/05/2026'},
+  {num:77,canal:'LIVES E WEBINARS',marca:'FCX CONSULTORIA',tarefa:'Semana Holding (Live série 3 episódios)',obs:'Erros de contadores: regime bens, contratos, doações',resp:'Ronaldo F.',p:0.0,ini:'11/05/2026',fim:'29/05/2026'},
+  {num:78,canal:'LIVES E WEBINARS',marca:'FCX CONSULTORIA',tarefa:'Webinar Reforma Tributária — impactos práticos',obs:'Foco em PMEs e indústria',resp:'Ronaldo F.',p:0.0,ini:'06/04/2026',fim:'10/04/2026'},
+  {num:79,canal:'LIVES E WEBINARS',marca:'CONTABILIDADE ALAVANCADA',tarefa:'Live mensal para contadores — insights e cases',obs:'Mínimo 1 por mês (abr, mai, jun)',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/06/2026'},
+  {num:80,canal:'LIVES E WEBINARS',marca:'RONALDO FCX',tarefa:'Live Ronaldo FCX — Papo de Negócios (mensal)',obs:'Entrevista com empresários e cases de sucesso',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/06/2026'},
+  {num:81,canal:'PALESTRAS',marca:'FCX CONSULTORIA',tarefa:'Mapear e contatar associações RJ e SP',obs:'CRC, SESCON, CDL, ACSP, Sindicatos',resp:'Ronaldo F.',p:0.0,ini:'09/03/2026',fim:'31/03/2026'},
+  {num:82,canal:'PALESTRAS',marca:'FCX CONSULTORIA',tarefa:'Agendar 2 palestras por associação (abr-jun)',obs:'Programa: Educação Corporativa Colaborativa',resp:'Ronaldo F.',p:0.0,ini:'23/03/2026',fim:'24/04/2026'},
+  {num:83,canal:'PALESTRAS',marca:'FCX CONSULTORIA',tarefa:'Executar palestras trimestrais presenciais',obs:'Temas: Compensações, Lucro Sócios, Holding, Reforma',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/06/2026'},
+  {num:84,canal:'PALESTRAS',marca:'SUPERMERCADO ALAVANCADO',tarefa:'Mapear empresas-alvo e contatos nos mercados-chave',obs:'Varejo, Indústria, Advocacia, Óleo & Gás',resp:'Ronaldo F.',p:0.0,ini:'09/03/2026',fim:'31/03/2026'},
+  {num:85,canal:'PALESTRAS',marca:'SUPERMERCADO ALAVANCADO',tarefa:'Agendar e executar palestras no mercado (abr-jun)',obs:'Mín. 1 por mês',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/06/2026'},
+  {num:86,canal:'PALESTRAS',marca:'CONTABILIDADE ALAVANCADA',tarefa:'Mapear escritórios de contabilidade parceiros RJ/SP',obs:'Foco em Contabilidade Alavancada',resp:'Ronaldo F.',p:0.0,ini:'16/03/2026',fim:'10/04/2026'},
+  {num:87,canal:'PALESTRAS',marca:'CONTABILIDADE ALAVANCADA',tarefa:'Executar rodada de palestras em contabilidades (abr-jun)',obs:'Programa Educação Corporativa',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/06/2026'},
+  {num:88,canal:'PALESTRAS',marca:'INDÚSTRIA ALAVANCADA',tarefa:'Mapear associações e parques industriais prioritários',obs:'RJ, SP e MG',resp:'Ronaldo F.',p:0.0,ini:'16/03/2026',fim:'10/04/2026'},
+  {num:89,canal:'PALESTRAS',marca:'INDÚSTRIA ALAVANCADA',tarefa:'Executar palestras para indústrias (mai-jun)',obs:'Mín. 2 palestras',resp:'Ronaldo F.',p:0.0,ini:'01/05/2026',fim:'30/06/2026'},
+  {num:90,canal:'PROJETO A TRINCA',marca:'FCX CONSULTORIA',tarefa:'Definir formato e roteiro do Projeto A Trinca',obs:'Ronaldo + Lucas + Sérgio — podcast/série',resp:'Ronaldo F.',p:0.0,ini:'16/03/2026',fim:'31/03/2026'},
+  {num:91,canal:'PROJETO A TRINCA',marca:'FCX CONSULTORIA',tarefa:'Gravar episódio piloto (A Trinca #01)',obs:'Tema: Compensações Indevidas na prática',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'17/04/2026'},
+  {num:92,canal:'PROJETO A TRINCA',marca:'CONTABILIDADE ALAVANCADA',tarefa:'Gravar episódio A Trinca — contabilidade #01',obs:'Tema: Como alavancou escritórios contábeis',resp:'Ronaldo F.',p:0.0,ini:'20/04/2026',fim:'08/05/2026'},
+  {num:93,canal:'PROJETO A TRINCA',marca:'RONALDO FCX',tarefa:'Gravar episódio A Trinca — cases empresariais #01',obs:'Case real de cliente — resultados comprovados',resp:'Ronaldo F.',p:0.0,ini:'11/05/2026',fim:'29/05/2026'},
+  {num:94,canal:'EVENTOS E FEIRAS',marca:'FEIRAS COMO EXPOSITOR',tarefa:'Mapear feiras prioritárias RJ, SP, MG',obs:'Restaurantes, Óleo & Gás, Náutico, Advocacia, Varejo',resp:'Ronaldo F.',p:0.0,ini:'09/03/2026',fim:'31/03/2026'},
+  {num:95,canal:'EVENTOS E FEIRAS',marca:'FEIRAS COMO EXPOSITOR',tarefa:'Contratar espaço e montar kit expositor (1 feira piloto)',obs:'Banner, brochura, uniforme, rollup',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'01/05/2026'},
+  {num:96,canal:'EVENTOS E FEIRAS',marca:'FEIRAS COMO EXPOSITOR',tarefa:'Participar da feira piloto com equipe treinada',obs:'Meta: 50+ leads qualificados',resp:'Ronaldo F.',p:0.0,ini:'01/05/2026',fim:'30/06/2026'},
+  {num:97,canal:'EVENTOS E FEIRAS',marca:'EVENTOS EXTERNOS',tarefa:'Mapear eventos de networking e negócios (abr-jun)',obs:'Eventos presenciais em RJ e SP',resp:'Ronaldo F.',p:0.0,ini:'16/03/2026',fim:'10/04/2026'},
+  {num:98,canal:'EVENTOS E FEIRAS',marca:'EVENTOS EXTERNOS',tarefa:'Participar de 2 eventos/mês com pitch institucional',obs:'Meta de networking: 20 contatos por evento',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/06/2026'},
+  {num:99,canal:'EVENTOS E FEIRAS',marca:'EVENTOS INTERNOS',tarefa:'Planejar 1 evento interno FCX por trimestre',obs:'Palestras, networking e cases internos',resp:'Ronaldo F.',p:0.0,ini:'23/03/2026',fim:'30/04/2026'},
+  {num:100,canal:'EVENTOS E FEIRAS',marca:'EVENTOS INTERNOS',tarefa:'Executar 1º Evento Interno FCX (junho/26)',obs:'Convidados: clientes, parceiros, embaixadores',resp:'Ronaldo F.',p:0.0,ini:'01/05/2026',fim:'30/06/2026'},
+  {num:101,canal:'MATERIAIS DE APOIO',marca:'PALESTRAS',tarefa:'Criar deck de apresentação institucional FCX (Brasil)',obs:'PowerPoint com identidade visual FCX',resp:'Ronaldo F.',p:0.0,ini:'09/03/2026',fim:'31/03/2026'},
+  {num:102,canal:'MATERIAIS DE APOIO',marca:'PALESTRAS',tarefa:'Criar deck de apresentação FCX USA (bilíngue)',obs:'EN + PT-BR',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/04/2026'},
+  {num:103,canal:'MATERIAIS DE APOIO',marca:'FOLDERS',tarefa:'Criar folders digitais por vertical (6 modelos)',obs:'FCX, ContAl, Supermercado, ADV, Holding, USA (empresarial + brasileiros em USA)',resp:'Ronaldo F.',p:0.0,ini:'23/03/2026',fim:'24/04/2026'},
+  {num:104,canal:'MATERIAIS DE APOIO',marca:'FOLDERS',tarefa:'Criar folders impressos para eventos',obs:'Mín. 200 unidades por vertical prioritária',resp:'Ronaldo F.',p:0.0,ini:'13/04/2026',fim:'01/05/2026'},
+  {num:105,canal:'MATERIAIS DE APOIO',marca:'APRESENTAÇÕES',tarefa:'Criar apresentação de vendas por serviço (6 decks)',obs:'RCT, PTA, Holding, M&A, Supermercado, ContAl',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'15/05/2026'},
+  {num:106,canal:'MATERIAIS DE APOIO',marca:'REL. COM PARCEIROS',tarefa:'Criar programa de nutrição de parceiros',obs:'Brindes, datas comemorativas, newsletter exclusiva',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'01/05/2026'},
+  {num:107,canal:'MATERIAIS DE APOIO',marca:'REL. COM PARCEIROS',tarefa:'Executar ações de relacionamento mensais (abr-jun)',obs:'Email + WhatsApp + presencial',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/06/2026'},
+  {num:108,canal:'MATERIAIS DE APOIO',marca:'REL. COM CLIENTES',tarefa:'Criar programa de nutrição de clientes ativos',obs:'Prova social, brindes, datas comemorativas',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'01/05/2026'},
+  {num:109,canal:'MATERIAIS DE APOIO',marca:'REL. COM CLIENTES',tarefa:'Implementar pesquisa NPS (satisfação)',obs:'Ferramenta: Typeform ou similar',resp:'Ronaldo F.',p:0.0,ini:'13/04/2026',fim:'01/05/2026'},
+  {num:110,canal:'MATERIAIS DE APOIO',marca:'CATÁLOGOS',tarefa:'Criar catálogo de serviços Brasil (digital + impresso)',obs:'Todos os serviços e verticais',resp:'Ronaldo F.',p:0.0,ini:'23/03/2026',fim:'24/04/2026'},
+  {num:111,canal:'MATERIAIS DE APOIO',marca:'CATÁLOGOS',tarefa:'Criar catálogo de serviços FCX USA (EN + PT-BR)',obs:'',resp:'Ronaldo F.',p:0.0,ini:'13/04/2026',fim:'15/05/2026'},
+  {num:112,canal:'MATERIAIS DE APOIO',marca:'REVISTA FCX / NEWSLETTER',tarefa:'Criar template da Revista FCX (newsletter mensal)',obs:'Design, seções: mercado, cases, dicas, agenda',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'30/04/2026'},
+  {num:113,canal:'MATERIAIS DE APOIO',marca:'REVISTA FCX / NEWSLETTER',tarefa:'Lançar 1ª edição da Revista FCX Newsletter',obs:'Distribuir para clientes, parceiros e leads',resp:'Ronaldo F.',p:0.0,ini:'01/05/2026',fim:'15/05/2026'},
+  {num:114,canal:'MATERIAIS DE APOIO',marca:'REVISTA FCX / NEWSLETTER',tarefa:'Publicar edições mensais (mai e jun/26)',obs:'Consistência mensal',resp:'Ronaldo F.',p:0.0,ini:'15/05/2026',fim:'30/06/2026'},
+  {num:115,canal:'MATERIAIS DE APOIO',marca:'CARTÕES DE VISITA',tarefa:'Redesenhar e produzir cartões de visita (Brasil)',obs:'Todos os sócios e lideranças — nova identidade',resp:'Ronaldo F.',p:0.0,ini:'09/03/2026',fim:'31/03/2026'},
+  {num:116,canal:'MATERIAIS DE APOIO',marca:'CARTÕES DE VISITA',tarefa:'Produzir cartões FCX USA (bilíngue EN+PT-BR)',obs:'',resp:'Ronaldo F.',p:0.0,ini:'01/04/2026',fim:'24/04/2026'},
+  {num:117,canal:'BRAZILIAN TIMES / FCX USA',marca:'ARTES',tarefa:'Criar artes para Brazilian Times (anúncios)',obs:'4 Artes para publicação no jornal digital e impresso: UMA ARTE DE PROTÓTIPO, material de apoio (Word).',resp:'Marketing',p:0.3,ini:'09/03/2026',fim:'23/03/2026'},
+  {num:118,canal:'BRAZILIAN TIMES / FCX USA',marca:'ARTES',tarefa:'Criar artes para Brazilian Times (revista mensal)',obs:'Escolher a arte do jornal que tiver mais procura. 1 Arte para publicação na revista mensal',resp:'Marketing',p:0.0,ini:'09/03/2026',fim:'31/03/2026'},
+  {num:119,canal:'BRAZILIAN TIMES / FCX USA',marca:'BANNERS',tarefa:'Criar 05 banners para WhatsApp',obs:'UMA ARTE EMPRESARIAL DE PROTÓTIPO E UMA ARTE PESSOA FÍSICA/BR DE PROTÓTIPO ,material de apoio (Word), Tamanhos de Banner Disponíveis para site
+
+•	Pro Banner: 1456 x 180 pixels.
+•	Banner Lateral: 1080 x 833 pixels.',resp:'Marketing',p:0.3,ini:'09/03/2026',fim:'26/03/2026'},
+  {num:120,canal:'BRAZILIAN TIMES / FCX USA',marca:'BANNERS',tarefa:'Criar 05 banners para Facebook',obs:'UMA ARTE EMPRESARIAL DE PROTÓTIPO E UMA ARTE PESSOA FÍSICA/BR DE PROTÓTIPO,material de apoio (Word)',resp:'Marketing',p:0.3,ini:'09/03/2026',fim:'26/03/2026'},
+  {num:121,canal:'BRAZILIAN TIMES / FCX USA',marca:'BANNERS',tarefa:'Criar 05 banners para Instagram',obs:'UMA ARTE EMPRESARIAL DE PROTÓTIPO E UMA ARTE PESSOA FÍSICA/BR DE PROTÓTIPO,material de apoio (Word)',resp:'Marketing',p:0.3,ini:'09/03/2026',fim:'26/03/2003'},
+  {num:122,canal:'BRAZILIAN TIMES / FCX USA',marca:'VÍDEOS',tarefa:'04 vídeos verticais para Facebook e Instagram (30 segundos)',obs:'UM VÍDEO EMPRESARIAL DE PROTÓTIPO E UM VÍDEO PESSOA FÍSICA/BR DE PROTÓTIPO ,material de apoio (Word) - Agendado para 25/03 as 10h30',resp:'Marcos Cailleaux / Lucas Prattes',p:0.5,ini:'09/03/2026',fim:'26/03/2026'},
+  {num:123,canal:'BRAZILIAN TIMES / FCX USA',marca:'VÍDEOS',tarefa:'04 vídeos horizontais para Facebook e Instagram (30 segundos)',obs:'UM VÍDEO EMPRESARIAL DE PROTÓTIPO E UM VÍDEO PESSOA FÍSICA/BR DE PROTÓTIPO ,material de apoio (Word) - Agendado para 25/03 as 10h30',resp:'Marcos Cailleaux / Lucas Prattes',p:0.5,ini:'09/03/2026',fim:'26/03/2026'},
+  {num:123,canal:'BRAZILIAN TIMES / FCX USA',marca:'VÍDEOS',tarefa:'04 Vídeos educativo/ institucional (10/15 minutos)',obs:'UM VÍDEO EMPRESARIAL DE PROTÓTIPO E UM VÍDEO PESSOA FÍSICA/BR DE PROTÓTIPO ,material de apoio (Word). Para resposta das perguntas (artigo) - segunda quinzena de abril',resp:'Marcos Cailleaux / Lucas Prattes',p:0.0,ini:'09/03/2026',fim:'31/03/2026'},
+  {num:124,canal:'BRAZILIAN TIMES / FCX USA',marca:'MATÉRIAS / ARTIGOS',tarefa:'04 Matérias/artigos educativo/ institucional com 250 palavras, foto e logo',obs:'material de apoio (Word). Incluir um forms para cadastro e campo de perguntas - QR Code. Agendado para 25/03 as 10h30 - Semanal',resp:'Marcos Cailleaux / Lucas Prattes',p:0.0,ini:'09/03/2026',fim:'27/03/2026'},
+  {num:125,canal:'BRAZILIAN TIMES / FCX USA',marca:'VINHETAS PARA RÁDIO',tarefa:'05 vinhetas para rádio de 30 segundos',obs:'material de apoio (Word) - 2 vinhetas gravadas - Agendado para 25/03 as 10h30 (05 vinhetas)',resp:'Marcos Cailleaux / Lucas Prattes',p:0.3,ini:'09/03/2026',fim:'26/03/2026'}
+];
+
+// ── LOAD DATA ─────────────────────────────────────────────────────
+function loadCSV(){
+  // Carrega dados embutidos direto — sem fetch
+  ALL = FALLBACK_DATA.map(t=>({
+    num: t.num,
+    canal: t.canal,
+    marca: t.marca,
+    tarefa: t.tarefa,
+    obs: t.obs,
+    resp: t.resp,
+    p: t.p,
+    ini: t.ini,
+    fim: t.fim,
+    mes: inferMes(t.ini, t.fim)
+  }));
+  ALL.forEach(t => t.urg = calcUrg(t));
+  document.getElementById('periodBadge').textContent='Mar – Jun 2026';
   document.getElementById('loadingScreen').classList.add('hidden');
   rebuildSidebar();
   renderAll();
@@ -638,3 +772,4 @@ loadCSV();
 </script>
 </body>
 </html>
+
