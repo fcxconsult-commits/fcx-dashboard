@@ -1,7 +1,7 @@
-﻿num,canal,marca,tarefa,obs,resp,progresso,inicio,termino
+num,canal,marca,tarefa,obs,resp,progresso,inicio,termino
 1,INSTAGRAM,FCX CONSULTORIA,Acesso — login e senha,Configurar acesso compartilhado,Ronaldo F.,1.0,02/03/2026,06/03/2026
 2,INSTAGRAM,FCX CONSULTORIA,Bio — descrição do perfil,"Texto, link e emojis",Ronaldo F.,1.0,02/03/2026,13/03/2026
-3,INSTAGRAM,FCX CONSULTORIA,Linktree — criação e links,Aguardando aprovação do Ronaldo Ferreira,Ronaldo F.,0,8,09/03/2026,20/03/2026
+3,INSTAGRAM,FCX CONSULTORIA,Linktree — criação e links,Aguardando aprovação do Ronaldo Ferreira,Ronaldo F.,0.9,09/03/2026,20/03/2026
 4,INSTAGRAM,FCX CONSULTORIA,Destaques — Vitrine & Branding,Capas padronizadas por categoria. Aguardando aprovação do Ronaldo Ferreira,Ronaldo F.,0.9,16/03/2026,20/03/2026
 5,INSTAGRAM,FCX CONSULTORIA,Feed — Quem somos (Carrossel/Vídeo),Apresentação institucional,Ronaldo F.,1.0,02/02/2026,06/03/2026
 6,INSTAGRAM,FCX CONSULTORIA,Feed — O que fazemos (Serviços),RCT ADM / PTA / RCT JUD / APT / Holding / M&A. Aguardando aprovação do Ronaldo Ferreira,Ronaldo F.,0.9,02/02/2026,20/03/2026
@@ -117,10 +117,7 @@
 116,MATERIAIS DE APOIO,CARTÕES DE VISITA,Produzir cartões FCX USA (bilíngue EN+PT-BR),,Ronaldo F.,0.0,01/04/2026,24/04/2026
 117,BRAZILIAN TIMES / FCX USA,ARTES,Criar artes para Brazilian Times (anúncios),"4 Artes para publicação no jornal digital e impresso: UMA ARTE DE PROTÓTIPO, material de apoio (Word).",Marketing,0.3,09/03/2026,23/03/2026
 118,BRAZILIAN TIMES / FCX USA,ARTES,Criar artes para Brazilian Times (revista mensal),Escolher a arte do jornal que tiver mais procura. 1 Arte para publicação na revista mensal,Marketing,0.0,09/03/2026,31/03/2026
-119,BRAZILIAN TIMES / FCX USA,BANNERS,Criar 05 banners para WhatsApp,"UMA ARTE EMPRESARIAL DE PROTÓTIPO E UMA ARTE PESSOA FÍSICA/BR DE PROTÓTIPO ,material de apoio (Word), Tamanhos de Banner Disponíveis para site
-
-•	Pro Banner: 1456 x 180 pixels.
-•	Banner Lateral: 1080 x 833 pixels.",Marketing,0.3,09/03/2026,26/03/2026
+119,BRAZILIAN TIMES / FCX USA,BANNERS,Criar 05 banners para WhatsApp,"UMA ARTE EMPRESARIAL DE PROTÓTIPO E UMA ARTE PESSOA FÍSICA/BR DE PROTÓTIPO ,material de apoio (Word), Tamanhos de Banner Disponíveis para site  •	Pro Banner: 1456 x 180 pixels. •	Banner Lateral: 1080 x 833 pixels.",Marketing,0.3,09/03/2026,26/03/2026
 120,BRAZILIAN TIMES / FCX USA,BANNERS,Criar 05 banners para Facebook,"UMA ARTE EMPRESARIAL DE PROTÓTIPO E UMA ARTE PESSOA FÍSICA/BR DE PROTÓTIPO,material de apoio (Word)",Marketing,0.3,09/03/2026,26/03/2026
 121,BRAZILIAN TIMES / FCX USA,BANNERS,Criar 05 banners para Instagram,"UMA ARTE EMPRESARIAL DE PROTÓTIPO E UMA ARTE PESSOA FÍSICA/BR DE PROTÓTIPO,material de apoio (Word)",Marketing,0.3,09/03/2026,26/03/2003
 122,BRAZILIAN TIMES / FCX USA,VÍDEOS,04 vídeos verticais para Facebook e Instagram (30 segundos),"UM VÍDEO EMPRESARIAL DE PROTÓTIPO E UM VÍDEO PESSOA FÍSICA/BR DE PROTÓTIPO ,material de apoio (Word) - Agendado para 25/03 as 10h30",Marcos Cailleaux / Lucas Prattes,0.5,09/03/2026,26/03/2026
