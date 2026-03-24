@@ -25,7 +25,7 @@ num,canal,marca,tarefa,obs,resp,p,ini,fim
 24,INSTAGRAM,FCX ADV,Feed — Conteúdo completo (5 posts),Especialidades jurídicas FCX - Postagens diárias. Ação continua,Ronaldo F.,0.3,23/03/2026,31/03/2026
 25,INSTAGRAM,FCX ADV,Nutrição e Engajamento,Interações mensais,Ronaldo F.,0.0,01/04/2026,30/04/2026
 26,INSTAGRAM,FCX USA,Acesso e configuração do perfil,Setup completo bilíngue,Ronaldo F.,1.0,02/03/2026,09/03/2026
-27,INSTAGRAM,FCX USA,Feed — Conteúdo Bilíngue (5 posts),"PT-BR e EN — Serviços, Cases, Benefícios",Ronaldo F.,0.0,01/04/2026,30/04/2026
+27,INSTAGRAM,FCX USA,Feed — Conteúdo Bilíngue (5 posts),"PT-BR e EN — Serviços, Cases, Benefícios",Ronaldo F.,0.5,01/04/2026,30/04/2026
 28,INSTAGRAM,FCX USA,Nutrição e Engajamento,Foco no público norte-americano,Ronaldo F.,0.0,01/04/2026,30/04/2026
 29,FACEBOOK,FCX CONSULTORIA,Acesso e configuração da página,"Admin, bio, links, foto de capa",Ronaldo F.,1.0,09/03/2026,20/03/2026
 30,FACEBOOK,FCX CONSULTORIA,Feed — Conteúdo espelhado do Instagram (5 posts),Reaproveitamento de conteúdo - à confirmar,Ronaldo F.,0.0,23/03/2026,31/03/2026
@@ -33,7 +33,7 @@ num,canal,marca,tarefa,obs,resp,p,ini,fim
 32,FACEBOOK,RONALDO FCX,Setup e conteúdo thought leadership,Posts de autoridade,Ronaldo F.,0.0,01/04/2026,01/05/2026
 33,FACEBOOK,SUPERMERCADO ALAVANCADO,Setup e conteúdo completo,Espelho Instagram,Ronaldo F.,0.0,23/03/2026,30/04/2026
 34,FACEBOOK,FCX ADV,Setup e conteúdo jurídico,Especialidades legais,Ronaldo F.,0.0,01/04/2026,01/05/2026
-35,FACEBOOK,FCX USA,Setup bilíngue e conteúdo,PT-BR e EN,Ronaldo F.,0.5,13/04/2026,29/05/2026
+35,FACEBOOK,FCX USA,Setup bilíngue e conteúdo,PT-BR e EN,Ronaldo F.,0.0,13/04/2026,29/05/2026
 36,LINKEDIN,FCX CONSULTORIA,Acesso e configuração da página empresarial,"Admin, banner, about, especialidades",Ronaldo F.,1.0,02/02/2026,06/03/2026
 37,LINKEDIN,FCX CONSULTORIA,Conteúdo — Feed B2B (5 posts),"Autoridade, cases, dados de mercado",Ronaldo F.,0.0,01/04/2026,30/04/2026
 38,LINKEDIN,FCX CONSULTORIA,Rotina de publicação semanal,Mín. 2x/semana — artigos e insights,Ronaldo F.,0.0,01/04/2026,30/04/2026
@@ -57,7 +57,7 @@ num,canal,marca,tarefa,obs,resp,p,ini,fim
 56,SITE,FCX CONSULTORIA,Otimização de SEO On-Page,"Palavras-chave: tributário, financeiro, holding, reforma",Ronaldo F.,0.0,01/04/2026,29/05/2026
 57,SITE,RONALDO FCX,Criar página pessoal de autoridade,"Bio, palestras, artigos, contato",Ronaldo F.,0.0,01/04/2026,30/04/2026
 58,SITE,FCX ADV,Criar ou revisar página FCX ADV,"Serviços jurídicos, equipe, contato",Ronaldo F.,0.0,01/04/2026,01/05/2026
-59,SITE,FCX USA,Comprar domínios fcx-bc.com e fcxus.com,Aguardando pagamento — prioridade alta,Ronaldo F.,0.0,02/03/2026,13/03/2026
+59,SITE,FCX USA,Comprar domínios fcx-bc.com e fcxus.com,Aguardando pagamento — prioridade alta,Ronaldo F.,1.0,02/03/2026,13/03/2026
 60,SITE,FCX USA,Estruturar site FCX USA bilíngue (EN + PT-BR),"Serviços, quem somos, contato USA",Ronaldo F.,0.0,16/03/2026,29/05/2026
 61,LANDING PAGE,CONTABILIDADE ALAVANCADA,Criar landing page de conversão,"Headline, prova social, CTA, formulário",Ronaldo F.,0.0,01/04/2026,30/04/2026
 62,LANDING PAGE,CONTABILIDADE ALAVANCADA,Integrar LP ao CRM e WhatsApp,Automação de follow-up,Ronaldo F.,0.0,24/04/2026,15/05/2026
