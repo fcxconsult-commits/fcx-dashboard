@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FCX · Dashboard Marketing 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ================================================================
+   FCX DESIGN TOKENS — Manual de Identidade Visual
+   ================================================================ */
+:root {
+  --v1:#033028; --v2:#237062; --v3:#63B0A2; --pr:#a6a8ab; --wh:#ffffff;
+  --bg:#07120f; --s1:#0d1f1a; --s2:#122a23; --s3:#1a3a30; --bor:#1e3d33;
+  --tx:#e8f0ee; --tm:#7aada0; --ts:#4d8074;
+  --grn:#3ecf8e; --yel:#f7d54f; --red:#f75f5f; --orn:#f7a24f;
+  --ff:'Montserrat',sans-serif; --r:10px; --r2:7px; --tr:.18s ease;
+}
+body.light{--bg:#f0f5f3;--s1:#ffffff;--s2:#e8f0ee;--s3:#d5e8e2;--bor:#c0d8cf;--tx:#033028;--tm:#237062;--ts:#5a9e8f;}
+body.light .hdr{background:linear-gradient(135deg,var(--v1),#0a4a3a)!important;}
+body.light .gt tr:hover td{background:rgba(99,176,162,.1)!important;}
+body.light .gt td{border-bottom-color:var(--bor)!important;}
+body.light .fpanel{background:#f8fdfb!important;}
+body.light .abar{background:var(--s2)!important;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--tx);font-family:var(--ff);font-size:13px;min-height:100vh;transition:background .3s,color .3s;-webkit-font-smoothing:antialiased;}
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--s2);}
+::-webkit-scrollbar-thumb{background:var(--v2);border-radius:3px;}
+
+/* HEADER */
+.hdr{background:linear-gradient(135deg,#021f18 0%,var(--v1) 60%,#0a3328 100%);border-bottom:1px solid rgba(99,176,162,.15);padding:0 24px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300;gap:12px;}
+.logo-area{display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.logo-svg{width:44px;height:44px;flex-shrink:0;}
+.logo-text{line-height:1.25;}
+.logo-name{font-size:15px;font-weight:800;letter-spacing:.06em;color:var(--wh);text-transform:uppercase;}
+.logo-sub{font-size:9px;font-weight:500;letter-spacing:.18em;color:var(--v3);text-transform:uppercase;}
+.hdr-sep{width:1px;height:28px;background:rgba(255,255,255,.1);flex-shrink:0;}
+.hdr-badge{font-size:10px;font-weight:600;letter-spacing:.08em;color:rgba(255,255,255,.45);text-transform:uppercase;white-space:nowrap;}
+.hdr-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tt{display:flex;align-items:center;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:3px;}
+.to{padding:4px 11px;border-radius:16px;font-size:10px;font-weight:600;letter-spacing:.04em;color:rgba(255,255,255,.4);transition:all var(--tr);white-space:nowrap;font-family:var(--ff);cursor:pointer;border:none;background:transparent;}
+.to.on{background:var(--v2);color:var(--wh);}
+.vt{display:flex;gap:5px;}
+.vb{padding:5px 12px;border-radius:var(--r2);border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.4);font-size:10px;font-weight:600;cursor:pointer;font-family:var(--ff);transition:all var(--tr);letter-spacing:.03em;}
+.vb.on{background:var(--v2);border-color:var(--v2);color:var(--wh);}
+.vb:hover:not(.on){background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);}
+.ftb{display:flex;align-items:center;gap:7px;padding:6px 14px;border-radius:var(--r2);border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.6);font-size:10px;font-weight:600;cursor:pointer;font-family:var(--ff);transition:all var(--tr);letter-spacing:.03em;}
+.ftb:hover,.ftb.on{background:rgba(99,176,162,.15);border-color:var(--v3);color:var(--wh);}
+.fbg{background:var(--v3);color:var(--v1);border-radius:9px;padding:1px 6px;font-size:9px;font-weight:800;display:none;}
+.fbg.show{display:inline;}
+.farr{font-size:9px;transition:transform .25s;color:rgba(255,255,255,.3);}
+.ftb.on .farr{transform:rotate(180deg);}
+.ld{width:7px;height:7px;border-radius:50%;background:var(--v3);box-shadow:0 0 7px var(--v3);animation:pulse 2s infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* FILTROS */
+.fpanel{position:sticky;top:62px;z-index:200;background:var(--s1);border-bottom:1px solid var(--bor);overflow:hidden;max-height:0;transition:max-height .35s cubic-bezier(.4,0,.2,1);}
+.fpanel.on{max-height:340px;}
+.fin{padding:18px 24px 20px;display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;}
+.fg{display:flex;flex-direction:column;gap:5px;min-width:110px;}
+.fgt{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--v3);margin-bottom:3px;}
+.fgc{display:flex;flex-direction:column;gap:3px;}
+.fdiv{width:1px;background:var(--bor);align-self:stretch;margin:0 4px;}
+.chip{display:flex;align-items:center;gap:7px;padding:5px 9px;border-radius:6px;cursor:pointer;transition:all var(--tr);border:1px solid transparent;font-size:11px;font-weight:500;color:var(--tm);user-select:none;}
+.chip:hover{background:var(--s2);color:var(--tx);}
+.chip.on{background:var(--s2);border-color:var(--bor);color:var(--tx);}
+.cdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.clb{flex:1;}
+.ccn{font-size:9px;background:var(--s3);padding:1px 5px;border-radius:8px;font-weight:700;color:var(--tm);}
+.chip.on .ccn{background:var(--bor);color:var(--tx);}
+.clb2{margin-left:auto;align-self:flex-end;padding:6px 14px;border-radius:var(--r2);border:1px solid var(--bor);background:transparent;color:var(--tm);font-size:10px;font-weight:600;cursor:pointer;font-family:var(--ff);transition:all var(--tr);}
+.clb2:hover{background:var(--s2);color:var(--tx);border-color:var(--v2);}
+.abar{display:none;align-items:center;gap:6px;flex-wrap:wrap;padding:7px 24px;background:var(--s1);border-bottom:1px solid var(--bor);font-size:10px;}
+.abar.show{display:flex;}
+.al{color:var(--tm);font-weight:600;letter-spacing:.05em;}
+.atag{display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:10px;background:rgba(35,112,98,.15);border:1px solid rgba(35,112,98,.3);color:var(--v3);font-size:10px;font-weight:600;}
+.arm{cursor:pointer;opacity:.5;margin-left:2px;}
+.arm:hover{opacity:1;}
+.ca{cursor:pointer;color:var(--v3);margin-left:auto;font-size:10px;font-weight:600;padding:3px 9px;border-radius:7px;border:1px solid rgba(99,176,162,.25);transition:all var(--tr);}
+.ca:hover{background:rgba(99,176,162,.1);}
+
+/* MAIN */
+.main{padding:18px 24px;display:flex;flex-direction:column;gap:14px;}
+
+/* INSIGHT STRIP */
+.istrip{display:flex;gap:10px;overflow-x:auto;padding-bottom:3px;}
+.ic{background:var(--s1);border:1px solid var(--bor);border-radius:var(--r);padding:14px 18px;flex-shrink:0;min-width:175px;position:relative;overflow:hidden;transition:transform var(--tr);}
+.ic:hover{transform:translateY(-2px);}
+.ic::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--ic,var(--v2));}
+.il{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tm);margin-bottom:5px;}
+.iv{font-size:22px;font-weight:800;color:var(--ic,var(--tx));line-height:1;}
+.id{font-size:10px;color:var(--ts);margin-top:4px;}
+
+/* KPI */
+.krow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+.kc{background:var(--s1);border:1px solid var(--bor);border-radius:var(--r);padding:16px 18px;position:relative;overflow:hidden;transition:transform var(--tr);}
+.kc:hover{transform:translateY(-2px);}
+.kc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--kc,var(--v2));}
+.kl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tm);margin-bottom:8px;}
+.kv{font-size:28px;font-weight:900;line-height:1;letter-spacing:-.01em;}
+.ks{font-size:9px;color:var(--ts);margin-top:6px;font-weight:500;}
+.ki{position:absolute;right:14px;top:14px;font-size:18px;opacity:.12;}
+
+/* CARDS */
+.crow{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:10px;}
+.card{background:var(--s1);border:1px solid var(--bor);border-radius:var(--r);padding:16px 18px;}
+.ct{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px;color:var(--tx);}
+.ct span{color:var(--tm);font-weight:500;font-size:10px;text-transform:none;letter-spacing:0;}
+
+/* DONUT */
+.dw{display:flex;align-items:center;gap:8px;}
+.dleg{display:flex;flex-direction:column;gap:10px;}
+.dli{display:flex;align-items:center;gap:8px;}
+.dld{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.dll{font-size:10px;color:var(--tm);margin-bottom:1px;}
+.dlv{font-size:14px;font-weight:800;}
+
+/* CANAL BARS */
+.cl{display:flex;flex-direction:column;gap:8px;}
+.cr{display:flex;align-items:center;gap:7px;}
+.cn{font-size:9px;color:var(--tm);width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;}
+.cbg{flex:1;height:5px;background:var(--s3);border-radius:3px;overflow:hidden;}
+.cb{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1);}
+.cc{font-size:10px;font-weight:700;width:22px;text-align:right;}
+
+/* PROGRESS POR MARCA */
+.pg{display:flex;flex-direction:column;gap:7px;}
+.pr{display:flex;align-items:center;gap:7px;}
+.pl{font-size:9px;color:var(--tm);width:140px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;}
+.pbg{flex:1;height:18px;background:var(--s3);border-radius:5px;overflow:hidden;}
+.pf{height:100%;border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-size:9px;font-weight:700;transition:width .7s cubic-bezier(.4,0,.2,1);}
+.pp{font-size:9px;color:var(--tm);width:28px;text-align:right;font-weight:600;}
+
+/* TABELA */
+.gs{background:var(--s1);border:1px solid var(--bor);border-radius:var(--r);padding:16px 18px;}
+.gsc{overflow-x:auto;}
+.gt{width:100%;border-collapse:collapse;min-width:780px;}
+.gt th{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--v3);padding:6px 8px;border-bottom:1px solid var(--bor);text-align:left;white-space:nowrap;}
+.gt td{padding:7px 8px;border-bottom:1px solid rgba(30,61,51,.5);vertical-align:middle;}
+.gt tr:hover td{background:rgba(35,112,98,.08);}
+.gt tr:last-child td{border-bottom:none;}
+.tn{color:var(--ts);font-size:10px;font-weight:600;}
+.tnm{font-size:11px;font-weight:500;max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;}
+.ctg{display:inline-block;padding:2px 7px;border-radius:6px;font-size:9px;font-weight:700;white-space:nowrap;letter-spacing:.03em;}
+.sp{display:inline-block;padding:2px 8px;border-radius:6px;font-size:9px;font-weight:700;letter-spacing:.03em;}
+.ub{display:inline-block;padding:2px 7px;border-radius:5px;font-size:9px;font-weight:700;letter-spacing:.03em;}
+.uA{background:rgba(247,95,95,.15);color:var(--red);}
+.uM{background:rgba(247,213,79,.12);color:var(--yel);}
+.uB{background:rgba(62,207,142,.1);color:var(--grn);}
+.pm{display:flex;align-items:center;gap:6px;}
+.pmb{width:44px;height:3px;background:var(--s3);border-radius:2px;overflow:hidden;}
+.pmf{height:100%;border-radius:2px;}
+.dt{font-size:10px;color:var(--tm);font-weight:500;}
+.nr td{text-align:center;color:var(--tm);font-size:12px;padding:32px;}
+
+/* BOTTOM */
+.br{display:grid;grid-template-columns:1.5fr 1fr;gap:10px;}
+.tlm{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:8px;}
+.tlml{font-size:9px;font-weight:700;letter-spacing:.08em;color:var(--v3);text-align:center;text-transform:uppercase;}
+.tlbs{display:flex;flex-direction:column;gap:5px;max-height:230px;overflow-y:auto;}
+.tlr{display:flex;align-items:center;gap:7px;}
+.tll{font-size:9px;color:var(--tm);width:100px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;}
+.tlt{flex:1;height:12px;background:var(--s3);border-radius:3px;position:relative;overflow:hidden;}
+.tlb{position:absolute;height:100%;border-radius:3px;}
+.rl{display:flex;flex-direction:column;gap:12px;}
+.ri{display:flex;align-items:center;gap:10px;}
+.ra{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;letter-spacing:.03em;}
+.rn{font-size:11px;font-weight:600;}
+.rt{font-size:10px;color:var(--tm);margin-top:1px;}
+.rp{font-size:13px;font-weight:800;margin-left:auto;}
+
+/* RESPONSIVE */
+@media(max-width:900px){.krow{grid-template-columns:repeat(3,1fr);}.crow{grid-template-columns:1fr;}.br{grid-template-columns:1fr;}}
+@media(max-width:600px){.hdr{padding:0 14px;}.main{padding:12px 14px;}.krow{grid-template-columns:repeat(2,1fr);}.hdr-sep,.hdr-badge,.vt{display:none;}.logo-name{font-size:12px;}}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="logo-area">
+    <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="47" fill="none" stroke="#a6a8ab" stroke-width="3.5"/>
+      <circle cx="50" cy="50" r="40" fill="#033028"/>
+      <text x="50" y="58" text-anchor="middle" font-family="Georgia,serif" font-size="23" font-weight="bold" letter-spacing="2" fill="#a6a8ab">FCX</text>
+    </svg>
+    <div class="logo-text">
+      <div class="logo-name">FCX Consultoria</div>
+      <div class="logo-sub">Empresarial</div>
+    </div>
+  </div>
+  <div class="hdr-sep"></div>
+  <div class="hdr-badge">Marketing &middot; Plano Fev&ndash;Jun 2026</div>
+  <div class="hdr-right">
+    <div class="tt">
+      <button class="to on" id="td" onclick="setTheme('dark')">&#9790; Noturno</button>
+      <button class="to"    id="tl" onclick="setTheme('light')">&#9728; Diurno</button>
+    </div>
+    <div class="vt">
+      <button class="vb on" id="btat" onclick="setView('t')">&#9889; Tático</button>
+      <button class="vb"    id="best" onclick="setView('e')">&#127919; Estratégico</button>
+    </div>
+    <button class="ftb" id="ftb" onclick="togglePanel()">
+      &#9878; Filtros <span class="fbg" id="fbg">0</span> <span class="farr">&#9660;</span>
+    </button>
+    <div class="ld"></div>
+  </div>
+</div>
+
+<div class="fpanel" id="fpanel">
+  <div class="fin">
+    <div class="fg"><div class="fgt">&#128197; Mês</div><div class="fgc" id="fmes"></div></div>
+    <div class="fdiv"></div>
+    <div class="fg"><div class="fgt">&#128202; Status</div><div class="fgc" id="fst"></div></div>
+    <div class="fdiv"></div>
+    <div class="fg"><div class="fgt">&#128680; Urgência</div><div class="fgc" id="furg"></div></div>
+    <div class="fdiv"></div>
+    <div class="fg" style="min-width:155px"><div class="fgt">&#127970; Marca</div><div class="fgc" id="fmarca"></div></div>
+    <div class="fdiv"></div>
+    <div class="fg" style="min-width:180px"><div class="fgt">&#128225; Canal</div><div class="fgc" id="fcanal" style="display:grid;grid-template-columns:1fr 1fr;gap:3px 12px"></div></div>
+    <button class="clb2" onclick="clearAll()">&#10005; Limpar filtros</button>
+  </div>
+</div>
+
+<div class="abar" id="abar">
+  <span class="al">Ativos:</span>
+  <div id="atags" style="display:flex;gap:5px;flex-wrap:wrap"></div>
+  <span class="ca" onclick="clearAll()">&#10005; Limpar tudo</span>
+</div>
+
+<div class="main">
+  <div id="istrip" style="display:none"><div class="istrip" id="icards"></div></div>
+
+  <div class="krow">
+    <div class="kc" style="--kc:var(--v3)"><div class="ki">&#128203;</div><div class="kl">Tarefas Filtradas</div><div class="kv" style="color:var(--v3)" id="kt">—</div><div class="ks" id="kts">do plano 1º semestre</div></div>
+    <div class="kc" style="--kc:var(--grn)"><div class="ki">&#9989;</div><div class="kl">Concluídas</div><div class="kv" style="color:var(--grn)" id="kd">—</div><div class="ks" id="kds">—</div></div>
+    <div class="kc" style="--kc:var(--yel)"><div class="ki">&#9889;</div><div class="kl">Em Andamento</div><div class="kv" style="color:var(--yel)" id="kw">—</div><div class="ks" id="kws">—</div></div>
+    <div class="kc" style="--kc:var(--tm)"><div class="ki">&#9634;</div><div class="kl">Não Iniciadas</div><div class="kv" style="color:var(--tm)" id="kn">—</div><div class="ks" id="kns">—</div></div>
+    <div class="kc" style="--kc:var(--orn)"><div class="ki">&#128200;</div><div class="kl">Progresso Médio</div><div class="kv" style="color:var(--orn)" id="kp">—</div><div class="ks">das filtradas</div></div>
+  </div>
+
+  <div class="crow">
+    <div class="card">
+      <div class="ct">Status Geral <span>por quantidade</span></div>
+      <div class="dw">
+        <svg width="200" height="200" viewBox="0 0 118 118" style="flex-shrink:0">
+          <circle cx="59" cy="59" r="44" fill="none" stroke="var(--s3)" stroke-width="20"/>
+          <circle id="dtodo" cx="59" cy="59" r="44" fill="none" stroke="var(--tm)"  stroke-width="20" stroke-dasharray="276 0" stroke-dashoffset="0"    transform="rotate(-90 59 59)" style="transition:all .6s"/>
+          <circle id="dwip"  cx="59" cy="59" r="44" fill="none" stroke="var(--yel)" stroke-width="20" stroke-dasharray="0 276"   stroke-dashoffset="0"    transform="rotate(-90 59 59)" style="transition:all .6s"/>
+          <circle id="ddone" cx="59" cy="59" r="44" fill="none" stroke="var(--grn)" stroke-width="20" stroke-dasharray="0 276"   stroke-dashoffset="0"    transform="rotate(-90 59 59)" style="transition:all .6s"/>
+          <text id="dpct" x="59" y="54" text-anchor="middle" fill="var(--tx)" font-family="Montserrat,sans-serif" font-size="20" font-weight="900">0%</text>
+          <text x="59" y="69" text-anchor="middle" fill="var(--tm)" font-size="9" font-family="Montserrat,sans-serif" font-weight="600">Executado</text>
+        </svg>
+        <div class="dleg">
+          <div class="dli"><div class="dld" style="background:var(--grn)"></div><div><div class="dll">Concluídas</div><div class="dlv" style="color:var(--grn)" id="ld">0</div></div></div>
+          <div class="dli"><div class="dld" style="background:var(--yel)"></div><div><div class="dll">Em Andamento</div><div class="dlv" style="color:var(--yel)" id="lw">0</div></div></div>
+          <div class="dli"><div class="dld" style="background:var(--tm)"></div><div><div class="dll">Não Iniciadas</div><div class="dlv" style="color:var(--tm)" id="ln">0</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card"><div class="ct">Por Canal <span>seleção atual</span></div><div class="cl" id="clist"></div></div>
+    <div class="card"><div class="ct">Progresso por Marca <span>% médio</span></div><div class="pg" id="pgrid"></div></div>
+  </div>
+
+  <div class="gs">
+    <div style="display:flex;align-items:center;margin-bottom:13px">
+      <div class="ct" style="margin-bottom:0">&#128197; Cronograma <span id="gcnt"></span></div>
+    </div>
+    <div class="gsc">
+      <table class="gt">
+        <thead><tr><th>#</th><th>Tarefa</th><th>Canal</th><th>Marca</th><th>Urgência</th><th>Progresso</th><th>Início</th><th>Término</th><th>Status</th></tr></thead>
+        <tbody id="gbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="br">
+    <div class="card">
+      <div class="ct">Timeline por Canal <span>Fev – Jun 2026</span></div>
+      <div class="tlm">
+        <div class="tlml">Fev/Mar</div><div class="tlml">Abril</div><div class="tlml">Maio</div><div class="tlml">Junho</div>
+      </div>
+      <div style="border-left:1px solid var(--bor);border-right:1px solid var(--bor);position:relative">
+        <div style="position:absolute;top:0;bottom:0;left:25%;width:1px;background:var(--bor);opacity:.35"></div>
+        <div style="position:absolute;top:0;bottom:0;left:50%;width:1px;background:var(--bor);opacity:.35"></div>
+        <div style="position:absolute;top:0;bottom:0;left:75%;width:1px;background:var(--bor);opacity:.35"></div>
+        <div style="position:absolute;top:0;bottom:0;left:5%;width:2px;background:var(--v3);opacity:.7"></div>
+        <div class="tlbs" id="tlbars"></div>
+      </div>
+    </div>
+    <div class="card"><div class="ct">Responsáveis <span>por volume</span></div><div class="rl" id="rlist"></div></div>
+  </div>
+</div>
+
+<script>
+var CC={"INSTAGRAM":"#e1306c","FACEBOOK":"#1877f2","LINKEDIN":"#0a66c2","INTRANET (SHAREPOINT)":"#038387","SITE":"#7c3aed","LANDING PAGE":"#059669","GOOGLE ADS":"#fbbc04","LIVES E WEBINARS":"#f97316","PALESTRAS":"#6366f1","PROJETO A TRINCA":"#ec4899","EVENTOS E FEIRAS":"#14b8a6","MATERIAIS DE APOIO":"#8b5cf6","BRAZILIAN TIMES / FCX USA":"#0369a1"};
+var MC={"FCX CONSULTORIA":"#63B0A2","CONTABILIDADE ALAVANCADA":"#3ecf8e","RONALDO FCX":"#f7a24f","SUPERMERCADO ALAVANCADO":"#6366f1","FCX ADV":"#ec4899","FCX USA":"#0369a1"};
+var RC={"Ronaldo F.":"#63B0A2","Design FCX":"#f7a24f","Equipe FCX":"#3ecf8e","Marketing":"#ec4899","Marcos Cailleaux / Lucas Prattes":"#6366f1"};
+var TLD=[{c:"INSTAGRAM",s:0,e:.45},{c:"FACEBOOK",s:.08,e:.5},{c:"LINKEDIN",s:.05,e:.55},{c:"INTRANET (SHAREPOINT)",s:.25,e:.75},{c:"SITE",s:.25,e:.75},{c:"LANDING PAGE",s:.25,e:.65},{c:"GOOGLE ADS",s:.25,e:.75},{c:"LIVES E WEBINARS",s:.25,e:.75},{c:"PALESTRAS",s:.25,e:.75},{c:"PROJETO A TRINCA",s:.02,e:.75},{c:"EVENTOS E FEIRAS",s:.38,e:.65},{c:"MATERIAIS DE APOIO",s:.25,e:.75},{c:"BRAZILIAN TIMES / FCX USA",s:.25,e:.75}];
+
+var FALLBACK_RAW=[{"num":1,"canal":"INSTAGRAM","marca":"FCX CONSULTORIA","tarefa":"Acesso — login e senha","obs":"Configurar acesso compartilhado","resp":"Ronaldo F.","p":1.0,"ini":"02/03/2026","fim":"06/03/2026"},{"num":2,"canal":"INSTAGRAM","marca":"FCX CONSULTORIA","tarefa":"Bio — descrição do perfil","obs":"Texto, link e emojis","resp":"Ronaldo F.","p":1.0,"ini":"02/03/2026","fim":"13/03/2026"},{"num":3,"canal":"INSTAGRAM","marca":"FCX CONSULTORIA","tarefa":"Linktree — criação e links","obs":"Aguardando aprovação do Ronaldo Ferreira","resp":"Ronaldo F.","p":0.9,"ini":"09/03/2026","fim":"20/03/2026"},{"num":4,"canal":"INSTAGRAM","marca":"FCX CONSULTORIA","tarefa":"Destaques — Vitrine & Branding","obs":"Capas padronizadas","resp":"Ronaldo F.","p":0.9,"ini":"16/03/2026","fim":"20/03/2026"},{"num":5,"canal":"INSTAGRAM","marca":"FCX CONSULTORIA","tarefa":"Feed — Quem somos","obs":"Apresentação institucional","resp":"Ronaldo F.","p":1.0,"ini":"02/02/2026","fim":"06/03/2026"},{"num":6,"canal":"INSTAGRAM","marca":"FCX CONSULTORIA","tarefa":"Feed — O que fazemos","obs":"RCT ADM / PTA / RCT JUD / APT / Holding / M&A","resp":"Ronaldo F.","p":0.9,"ini":"02/02/2026","fim":"20/03/2026"},{"num":7,"canal":"INSTAGRAM","marca":"FCX CONSULTORIA","tarefa":"Feed — Benefícios","obs":"Carrossel / Vídeo","resp":"Ronaldo F.","p":0.9,"ini":"02/02/2026","fim":"20/03/2026"},{"num":8,"canal":"INSTAGRAM","marca":"FCX CONSULTORIA","tarefa":"Feed — Resultados (Cases)","obs":"Carrossel / Vídeo com dados reais","resp":"Ronaldo F.","p":0.0,"ini":"02/02/2026","fim":"31/03/2026"},{"num":9,"canal":"INSTAGRAM","marca":"FCX CONSULTORIA","tarefa":"Valorizando a Nossa Casa","obs":"Conteúdo de cultura interna","resp":"Ronaldo F.","p":0.0,"ini":"02/02/2026","fim":"30/04/2026"},{"num":10,"canal":"INSTAGRAM","marca":"FCX CONSULTORIA","tarefa":"Percepção de Mercado","obs":"Interações e comentários","resp":"Ronaldo F.","p":0.0,"ini":"02/02/2026","fim":"30/04/2026"},{"num":11,"canal":"INSTAGRAM","marca":"FCX CONSULTORIA","tarefa":"Caixa de Perguntas","obs":"Stories interativos semanais","resp":"Ronaldo F.","p":0.0,"ini":"02/02/2026","fim":"30/04/2026"},{"num":12,"canal":"INSTAGRAM","marca":"CONTABILIDADE ALAVANCADA","tarefa":"Acesso — login e senha","obs":"Configurar acesso compartilhado","resp":"Ronaldo F.","p":1.0,"ini":"02/03/2026","fim":"06/03/2026"},{"num":13,"canal":"INSTAGRAM","marca":"CONTABILIDADE ALAVANCADA","tarefa":"Bio e Linktree","obs":"Atualizar texto e links","resp":"Ronaldo F.","p":1.0,"ini":"02/03/2026","fim":"13/03/2026"},{"num":14,"canal":"INSTAGRAM","marca":"CONTABILIDADE ALAVANCADA","tarefa":"Destaques — Vitrine & Branding","obs":"Capas padronizadas","resp":"Ronaldo F.","p":0.9,"ini":"16/03/2026","fim":"31/03/2026"},{"num":15,"canal":"INSTAGRAM","marca":"CONTABILIDADE ALAVANCADA","tarefa":"Feed — Conteúdo completo (5 posts)","obs":"Quem somos, Serviços, Benefícios, Cases","resp":"Ronaldo F.","p":0.7,"ini":"16/03/2026","fim":"31/03/2026"},{"num":16,"canal":"INSTAGRAM","marca":"CONTABILIDADE ALAVANCADA","tarefa":"Nutrição e Engajamento","obs":"Percepção de mercado + Caixa de perguntas","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/04/2026"},{"num":17,"canal":"INSTAGRAM","marca":"RONALDO FCX","tarefa":"Acesso e configuração inicial","obs":"Login + bio + linktree","resp":"Ronaldo F.","p":1.0,"ini":"02/02/2026","fim":"06/03/2026"},{"num":18,"canal":"INSTAGRAM","marca":"RONALDO FCX","tarefa":"Feed — Thought Leadership (5 posts)","obs":"Posicionar Ronaldo como especialista","resp":"Ronaldo F.","p":0.7,"ini":"02/02/2026","fim":"31/03/2026"},{"num":19,"canal":"INSTAGRAM","marca":"RONALDO FCX","tarefa":"Nutrição e Engajamento","obs":"Interações diárias","resp":"Ronaldo F.","p":0.0,"ini":"23/03/2026","fim":"30/04/2026"},{"num":20,"canal":"INSTAGRAM","marca":"SUPERMERCADO ALAVANCADO","tarefa":"Acesso — login e senha","obs":"Configurar acesso","resp":"Ronaldo F.","p":1.0,"ini":"02/03/2026","fim":"06/03/2026"},{"num":21,"canal":"INSTAGRAM","marca":"SUPERMERCADO ALAVANCADO","tarefa":"Feed e Destaques completos","obs":"Bio, destaques, 5 posts","resp":"Ronaldo F.","p":0.5,"ini":"16/03/2026","fim":"31/03/2026"},{"num":22,"canal":"INSTAGRAM","marca":"SUPERMERCADO ALAVANCADO","tarefa":"Nutrição e Engajamento","obs":"Percepção de mercado","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/04/2026"},{"num":23,"canal":"INSTAGRAM","marca":"FCX ADV","tarefa":"Acesso e setup completo","obs":"Login + bio + linktree + destaques","resp":"Ronaldo F.","p":0.15,"ini":"09/03/2026","fim":"31/03/2026"},{"num":24,"canal":"INSTAGRAM","marca":"FCX ADV","tarefa":"Feed — Conteúdo completo","obs":"Especialidades jurídicas FCX","resp":"Ronaldo F.","p":0.3,"ini":"23/03/2026","fim":"31/03/2026"},{"num":25,"canal":"INSTAGRAM","marca":"FCX ADV","tarefa":"Nutrição e Engajamento","obs":"Interações mensais","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/04/2026"},{"num":26,"canal":"INSTAGRAM","marca":"FCX USA","tarefa":"Acesso e configuração do perfil","obs":"Setup completo bilíngue","resp":"Ronaldo F.","p":1.0,"ini":"02/03/2026","fim":"09/03/2026"},{"num":27,"canal":"INSTAGRAM","marca":"FCX USA","tarefa":"Feed — Conteúdo Bilíngue","obs":"PT-BR e EN","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/04/2026"},{"num":28,"canal":"INSTAGRAM","marca":"FCX USA","tarefa":"Nutrição e Engajamento","obs":"Foco no público norte-americano","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/04/2026"},{"num":29,"canal":"FACEBOOK","marca":"FCX CONSULTORIA","tarefa":"Acesso e configuração da página","obs":"Admin, bio, links, foto de capa","resp":"Ronaldo F.","p":1.0,"ini":"09/03/2026","fim":"20/03/2026"},{"num":30,"canal":"FACEBOOK","marca":"FCX CONSULTORIA","tarefa":"Feed — Conteúdo espelhado do Instagram","obs":"Reaproveitamento de conteúdo","resp":"Ronaldo F.","p":0.0,"ini":"23/03/2026","fim":"31/03/2026"},{"num":31,"canal":"FACEBOOK","marca":"CONTABILIDADE ALAVANCADA","tarefa":"Setup e conteúdo completo","obs":"Espelho Instagram","resp":"Ronaldo F.","p":0.0,"ini":"23/03/2026","fim":"30/04/2026"},{"num":32,"canal":"FACEBOOK","marca":"RONALDO FCX","tarefa":"Setup e conteúdo thought leadership","obs":"Posts de autoridade","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"01/05/2026"},{"num":33,"canal":"FACEBOOK","marca":"SUPERMERCADO ALAVANCADO","tarefa":"Setup e conteúdo completo","obs":"Espelho Instagram","resp":"Ronaldo F.","p":0.0,"ini":"23/03/2026","fim":"30/04/2026"},{"num":34,"canal":"FACEBOOK","marca":"FCX ADV","tarefa":"Setup e conteúdo jurídico","obs":"Especialidades legais","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"01/05/2026"},{"num":35,"canal":"FACEBOOK","marca":"FCX USA","tarefa":"Setup bilíngue e conteúdo","obs":"PT-BR e EN","resp":"Ronaldo F.","p":0.0,"ini":"13/04/2026","fim":"29/05/2026"},{"num":36,"canal":"LINKEDIN","marca":"FCX CONSULTORIA","tarefa":"Acesso e configuração da página empresarial","obs":"Admin, banner, about, especialidades","resp":"Ronaldo F.","p":1.0,"ini":"02/02/2026","fim":"06/03/2026"},{"num":37,"canal":"LINKEDIN","marca":"FCX CONSULTORIA","tarefa":"Conteúdo — Feed B2B (5 posts)","obs":"Autoridade, cases, dados de mercado","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/04/2026"},{"num":38,"canal":"LINKEDIN","marca":"FCX CONSULTORIA","tarefa":"Rotina de publicação semanal","obs":"Mín. 2x/semana","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/04/2026"},{"num":39,"canal":"LINKEDIN","marca":"CONTABILIDADE ALAVANCADA","tarefa":"Setup e conteúdo B2B","obs":"Direcionado a contadores e empresas","resp":"Ronaldo F.","p":0.0,"ini":"23/03/2026","fim":"01/05/2026"},{"num":40,"canal":"LINKEDIN","marca":"RONALDO FCX","tarefa":"Perfil pessoal — thought leadership","obs":"2 posts/semana","resp":"Ronaldo F.","p":0.0,"ini":"09/03/2026","fim":"30/06/2026"},{"num":41,"canal":"LINKEDIN","marca":"SUPERMERCADO ALAVANCADO","tarefa":"Setup e conteúdo segmento varejo","obs":"","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"15/05/2026"},{"num":42,"canal":"LINKEDIN","marca":"FCX ADV","tarefa":"Setup e conteúdo jurídico","obs":"","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"15/05/2026"},{"num":43,"canal":"LINKEDIN","marca":"FCX USA","tarefa":"Setup bilíngue e conteúdo internacional","obs":"EN + PT-BR","resp":"Ronaldo F.","p":0.0,"ini":"13/04/2026","fim":"29/05/2026"},{"num":44,"canal":"INTRANET (SHAREPOINT)","marca":"SHAREPOINT","tarefa":"Criar biblioteca de artes no SharePoint","obs":"Templates, logos, ícones, paleta de cores","resp":"Ronaldo F.","p":0.0,"ini":"09/03/2026","fim":"31/03/2026"},{"num":45,"canal":"INTRANET (SHAREPOINT)","marca":"MARKETING","tarefa":"Organizar artes por marca","obs":"Estrutura de pastas padronizada","resp":"Ronaldo F.","p":0.0,"ini":"16/03/2026","fim":"10/04/2026"},{"num":46,"canal":"INTRANET (SHAREPOINT)","marca":"FCX USA","tarefa":"Criar banners digitais — todos os tamanhos","obs":"Feed, stories, LinkedIn, site","resp":"Ronaldo F.","p":0.0,"ini":"16/03/2026","fim":"10/04/2026"},{"num":47,"canal":"INTRANET (SHAREPOINT)","marca":"FCX CONSULTORIA","tarefa":"Criar banners impressos — eventos e feiras","obs":"Roll-up, mesa, backdrop","resp":"Ronaldo F.","p":0.0,"ini":"23/03/2026","fim":"24/04/2026"},{"num":48,"canal":"INTRANET (SHAREPOINT)","marca":"SHAREPOINT","tarefa":"Estruturar repositório de vídeos","obs":"Categorias: institucional, serviços, depoimentos","resp":"Ronaldo F.","p":0.0,"ini":"09/03/2026","fim":"31/03/2026"},{"num":49,"canal":"INTRANET (SHAREPOINT)","marca":"FCX CONSULTORIA","tarefa":"Produzir vídeos institucionais (mín. 3)","obs":"Quem somos, Serviços, Cases","resp":"Ronaldo F.","p":0.0,"ini":"23/03/2026","fim":"01/05/2026"},{"num":50,"canal":"INTRANET (SHAREPOINT)","marca":"SHAREPOINT","tarefa":"Criar calendário editorial trimestral","obs":"Temas: Tributário, Financeiro, Holding, Reforma","resp":"Ronaldo F.","p":0.0,"ini":"09/03/2026","fim":"20/03/2026"},{"num":51,"canal":"INTRANET (SHAREPOINT)","marca":"FCX USA","tarefa":"Produzir e publicar 6 artigos educativos","obs":"Mín. 1 por quinzena","resp":"Ronaldo F.","p":0.0,"ini":"16/03/2026","fim":"30/06/2026"},{"num":52,"canal":"SITE","marca":"FCX CONSULTORIA","tarefa":"Auditoria e melhorias do site","obs":"SEO, velocidade, mobile, conteúdo","resp":"Ronaldo F.","p":0.0,"ini":"09/03/2026","fim":"20/03/2026"},{"num":53,"canal":"SITE","marca":"FCX CONSULTORIA","tarefa":"Atualizar página Sobre Nós","obs":"Fotos e bio dos sócios","resp":"Ronaldo F.","p":0.0,"ini":"23/03/2026","fim":"10/04/2026"},{"num":54,"canal":"SITE","marca":"FCX CONSULTORIA","tarefa":"Criar página de Cases e Resultados","obs":"Com dados e depoimentos reais","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/04/2026"},{"num":55,"canal":"SITE","marca":"FCX CONSULTORIA","tarefa":"Implementar pop-up de captura de leads","obs":"Integração com CRM","resp":"Ronaldo F.","p":0.0,"ini":"13/04/2026","fim":"01/05/2026"},{"num":56,"canal":"SITE","marca":"FCX CONSULTORIA","tarefa":"Otimização de SEO On-Page","obs":"Palavras-chave: tributário, financeiro, holding","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"29/05/2026"},{"num":57,"canal":"SITE","marca":"RONALDO FCX","tarefa":"Criar página pessoal de autoridade","obs":"Bio, palestras, artigos, contato","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/04/2026"},{"num":58,"canal":"SITE","marca":"FCX ADV","tarefa":"Criar ou revisar página FCX ADV","obs":"Serviços jurídicos, equipe, contato","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"01/05/2026"},{"num":59,"canal":"SITE","marca":"FCX USA","tarefa":"Comprar domínios fcx-bc.com e fcxus.com","obs":"Aguardando pagamento — prioridade alta","resp":"Ronaldo F.","p":0.0,"ini":"02/03/2026","fim":"13/03/2026"},{"num":60,"canal":"SITE","marca":"FCX USA","tarefa":"Estruturar site FCX USA bilíngue","obs":"Serviços, quem somos, contato USA","resp":"Ronaldo F.","p":0.0,"ini":"16/03/2026","fim":"29/05/2026"},{"num":61,"canal":"LANDING PAGE","marca":"CONTABILIDADE ALAVANCADA","tarefa":"Criar landing page de conversão","obs":"Headline, prova social, CTA, formulário","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/04/2026"},{"num":62,"canal":"LANDING PAGE","marca":"CONTABILIDADE ALAVANCADA","tarefa":"Integrar LP ao CRM e WhatsApp","obs":"Automação de follow-up","resp":"Ronaldo F.","p":0.0,"ini":"24/04/2026","fim":"15/05/2026"},{"num":63,"canal":"LANDING PAGE","marca":"SUPERMERCADO ALAVANCADO","tarefa":"Criar landing page de conversão — varejo","obs":"Resultados específicos do segmento","resp":"Ronaldo F.","p":0.0,"ini":"13/04/2026","fim":"09/05/2026"},{"num":64,"canal":"LANDING PAGE","marca":"SUPERMERCADO ALAVANCADO","tarefa":"Integrar LP ao CRM","obs":"","resp":"Ronaldo F.","p":0.0,"ini":"04/05/2026","fim":"22/05/2026"},{"num":65,"canal":"LANDING PAGE","marca":"INDÚSTRIA ALAVANCADA","tarefa":"Criar landing page — indústria","obs":"Resultados para indústrias e manufatura","resp":"Ronaldo F.","p":0.0,"ini":"04/05/2026","fim":"29/05/2026"},{"num":66,"canal":"LANDING PAGE","marca":"INDÚSTRIA ALAVANCADA","tarefa":"Integrar LP ao CRM","obs":"","resp":"Ronaldo F.","p":0.0,"ini":"18/05/2026","fim":"05/06/2026"},{"num":67,"canal":"GOOGLE ADS","marca":"FCX CONSULTORIA","tarefa":"Criar conta Google Ads e configurar acesso","obs":"MCC e tag de conversão no site","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"10/04/2026"},{"num":68,"canal":"GOOGLE ADS","marca":"FCX CONSULTORIA","tarefa":"Pesquisa de palavras-chave","obs":"Keyword Planner + SEMrush","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"17/04/2026"},{"num":69,"canal":"GOOGLE ADS","marca":"FCX CONSULTORIA","tarefa":"Criar campanha Search — FCX Consultoria","obs":"Palavras-chave: recuperação tributária, holding","resp":"Ronaldo F.","p":0.0,"ini":"13/04/2026","fim":"30/04/2026"},{"num":70,"canal":"GOOGLE ADS","marca":"CONTABILIDADE ALAVANCADA","tarefa":"Criar campanha Search — Contabilidade Alavancada","obs":"Segmentação: contadores e pequenas empresas","resp":"Ronaldo F.","p":0.0,"ini":"24/04/2026","fim":"15/05/2026"},{"num":71,"canal":"GOOGLE ADS","marca":"SUPERMERCADO ALAVANCADO","tarefa":"Criar campanha Search — Supermercado","obs":"Segmentação: varejo e distribuidoras","resp":"Ronaldo F.","p":0.0,"ini":"04/05/2026","fim":"22/05/2026"},{"num":72,"canal":"GOOGLE ADS","marca":"INDÚSTRIA ALAVANCADA","tarefa":"Criar campanha Search — Indústria","obs":"Segmentação: indústrias e manufatura","resp":"Ronaldo F.","p":0.0,"ini":"18/05/2026","fim":"05/06/2026"},{"num":73,"canal":"GOOGLE ADS","marca":"FCX ADV","tarefa":"Criar campanha Search — FCX ADV","obs":"Segmentação: empresas com passivos fiscais","resp":"Ronaldo F.","p":0.0,"ini":"18/05/2026","fim":"05/06/2026"},{"num":74,"canal":"GOOGLE ADS","marca":"MARKETING","tarefa":"Relatório mensal de performance","obs":"CTR, CPC, conversões, ROAS","resp":"Ronaldo F.","p":0.0,"ini":"01/05/2026","fim":"30/06/2026"},{"num":75,"canal":"LIVES E WEBINARS","marca":"FCX CONSULTORIA","tarefa":"Semana Compensações Indevidas (4 episódios)","obs":"Títulos, Precatórios, Créditos Terceiros","resp":"Ronaldo F.","p":0.0,"ini":"30/03/2026","fim":"17/04/2026"},{"num":76,"canal":"LIVES E WEBINARS","marca":"FCX CONSULTORIA","tarefa":"Semana Jurídica (4 episódios)","obs":"Transações, Penhoras, IAS, Liminar Simples","resp":"Ronaldo F.","p":0.0,"ini":"20/04/2026","fim":"08/05/2026"},{"num":77,"canal":"LIVES E WEBINARS","marca":"FCX CONSULTORIA","tarefa":"Semana Holding (3 episódios)","obs":"Erros de contadores","resp":"Ronaldo F.","p":0.0,"ini":"11/05/2026","fim":"29/05/2026"},{"num":78,"canal":"LIVES E WEBINARS","marca":"FCX CONSULTORIA","tarefa":"Webinar Reforma Tributária","obs":"Foco em PMEs e indústria","resp":"Ronaldo F.","p":0.0,"ini":"06/04/2026","fim":"10/04/2026"},{"num":79,"canal":"LIVES E WEBINARS","marca":"CONTABILIDADE ALAVANCADA","tarefa":"Live mensal para contadores","obs":"Mínimo 1 por mês","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/06/2026"},{"num":80,"canal":"LIVES E WEBINARS","marca":"RONALDO FCX","tarefa":"Live Ronaldo FCX — Papo de Negócios","obs":"Entrevista com empresários","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/06/2026"},{"num":81,"canal":"PALESTRAS","marca":"FCX CONSULTORIA","tarefa":"Mapear e contatar associações RJ e SP","obs":"CRC, SESCON, CDL, ACSP, Sindicatos","resp":"Ronaldo F.","p":0.0,"ini":"09/03/2026","fim":"31/03/2026"},{"num":82,"canal":"PALESTRAS","marca":"FCX CONSULTORIA","tarefa":"Agendar 2 palestras por associação","obs":"Educação Corporativa Colaborativa","resp":"Ronaldo F.","p":0.0,"ini":"23/03/2026","fim":"24/04/2026"},{"num":83,"canal":"PALESTRAS","marca":"FCX CONSULTORIA","tarefa":"Executar palestras trimestrais presenciais","obs":"Compensações, Lucro Sócios, Holding","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/06/2026"},{"num":84,"canal":"PALESTRAS","marca":"SUPERMERCADO ALAVANCADO","tarefa":"Mapear empresas-alvo e contatos","obs":"Varejo, Indústria, Advocacia, Óleo & Gás","resp":"Ronaldo F.","p":0.0,"ini":"09/03/2026","fim":"31/03/2026"},{"num":85,"canal":"PALESTRAS","marca":"SUPERMERCADO ALAVANCADO","tarefa":"Agendar e executar palestras no mercado","obs":"Mín. 1 por mês","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/06/2026"},{"num":86,"canal":"PALESTRAS","marca":"CONTABILIDADE ALAVANCADA","tarefa":"Mapear escritórios parceiros RJ/SP","obs":"Foco em Contabilidade Alavancada","resp":"Ronaldo F.","p":0.0,"ini":"16/03/2026","fim":"10/04/2026"},{"num":87,"canal":"PALESTRAS","marca":"CONTABILIDADE ALAVANCADA","tarefa":"Executar palestras em contabilidades","obs":"Programa Educação Corporativa","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/06/2026"},{"num":88,"canal":"PALESTRAS","marca":"INDÚSTRIA ALAVANCADA","tarefa":"Mapear associações e parques industriais","obs":"RJ, SP e MG","resp":"Ronaldo F.","p":0.0,"ini":"16/03/2026","fim":"10/04/2026"},{"num":89,"canal":"PALESTRAS","marca":"INDÚSTRIA ALAVANCADA","tarefa":"Executar palestras para indústrias","obs":"Mín. 2 palestras","resp":"Ronaldo F.","p":0.0,"ini":"01/05/2026","fim":"30/06/2026"},{"num":90,"canal":"PROJETO A TRINCA","marca":"FCX CONSULTORIA","tarefa":"Definir formato e roteiro do Projeto A Trinca","obs":"Ronaldo + Lucas + Sérgio — podcast/série","resp":"Ronaldo F.","p":0.0,"ini":"16/03/2026","fim":"31/03/2026"},{"num":91,"canal":"PROJETO A TRINCA","marca":"FCX CONSULTORIA","tarefa":"Gravar episódio piloto (A Trinca #01)","obs":"Compensações Indevidas na prática","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"17/04/2026"},{"num":92,"canal":"PROJETO A TRINCA","marca":"CONTABILIDADE ALAVANCADA","tarefa":"Gravar A Trinca — contabilidade #01","obs":"Como alavancou escritórios contábeis","resp":"Ronaldo F.","p":0.0,"ini":"20/04/2026","fim":"08/05/2026"},{"num":93,"canal":"PROJETO A TRINCA","marca":"RONALDO FCX","tarefa":"Gravar A Trinca — cases empresariais #01","obs":"Case real de cliente","resp":"Ronaldo F.","p":0.0,"ini":"11/05/2026","fim":"29/05/2026"},{"num":94,"canal":"EVENTOS E FEIRAS","marca":"MARKETING","tarefa":"Mapear feiras prioritárias RJ, SP, MG","obs":"Restaurantes, Óleo & Gás, Náutico, Advocacia","resp":"Ronaldo F.","p":0.0,"ini":"09/03/2026","fim":"31/03/2026"},{"num":95,"canal":"EVENTOS E FEIRAS","marca":"MARKETING","tarefa":"Contratar espaço e montar kit expositor","obs":"Banner, brochura, uniforme, rollup","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"01/05/2026"},{"num":96,"canal":"EVENTOS E FEIRAS","marca":"MARKETING","tarefa":"Participar da feira piloto","obs":"Meta: 50+ leads qualificados","resp":"Ronaldo F.","p":0.0,"ini":"01/05/2026","fim":"30/06/2026"},{"num":97,"canal":"EVENTOS E FEIRAS","marca":"MARKETING","tarefa":"Mapear eventos de networking","obs":"Eventos presenciais em RJ e SP","resp":"Ronaldo F.","p":0.0,"ini":"16/03/2026","fim":"10/04/2026"},{"num":98,"canal":"EVENTOS E FEIRAS","marca":"MARKETING","tarefa":"Participar de 2 eventos/mês","obs":"Meta: 20 contatos por evento","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/06/2026"},{"num":99,"canal":"EVENTOS E FEIRAS","marca":"MARKETING","tarefa":"Planejar 1 evento interno FCX","obs":"Palestras, networking e cases internos","resp":"Ronaldo F.","p":0.0,"ini":"23/03/2026","fim":"30/04/2026"},{"num":100,"canal":"EVENTOS E FEIRAS","marca":"MARKETING","tarefa":"Executar 1º Evento Interno FCX (junho/26)","obs":"Clientes, parceiros, embaixadores","resp":"Ronaldo F.","p":0.0,"ini":"01/05/2026","fim":"30/06/2026"},{"num":101,"canal":"MATERIAIS DE APOIO","marca":"FCX CONSULTORIA","tarefa":"Criar deck institucional FCX (Brasil)","obs":"PowerPoint com identidade visual FCX","resp":"Ronaldo F.","p":0.0,"ini":"09/03/2026","fim":"31/03/2026"},{"num":102,"canal":"MATERIAIS DE APOIO","marca":"FCX USA","tarefa":"Criar deck FCX USA (bilíngue)","obs":"EN + PT-BR","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/04/2026"},{"num":103,"canal":"MATERIAIS DE APOIO","marca":"FCX CONSULTORIA","tarefa":"Criar folders digitais por vertical (6 modelos)","obs":"FCX, ContAl, Supermercado, ADV, Holding, USA","resp":"Ronaldo F.","p":0.0,"ini":"23/03/2026","fim":"24/04/2026"},{"num":104,"canal":"MATERIAIS DE APOIO","marca":"FCX CONSULTORIA","tarefa":"Criar folders impressos para eventos","obs":"Mín. 200 unidades por vertical","resp":"Ronaldo F.","p":0.0,"ini":"13/04/2026","fim":"01/05/2026"},{"num":105,"canal":"MATERIAIS DE APOIO","marca":"FCX CONSULTORIA","tarefa":"Criar apresentação de vendas por serviço (6 decks)","obs":"RCT, PTA, Holding, M&A, Supermercado, ContAl","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"15/05/2026"},{"num":106,"canal":"MATERIAIS DE APOIO","marca":"MARKETING","tarefa":"Criar programa de nutrição de parceiros","obs":"Brindes, datas comemorativas, newsletter","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"01/05/2026"},{"num":107,"canal":"MATERIAIS DE APOIO","marca":"MARKETING","tarefa":"Executar ações de relacionamento mensais","obs":"Email + WhatsApp + presencial","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/06/2026"},{"num":108,"canal":"MATERIAIS DE APOIO","marca":"MARKETING","tarefa":"Criar programa de nutrição de clientes","obs":"Prova social, brindes, datas comemorativas","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"01/05/2026"},{"num":109,"canal":"MATERIAIS DE APOIO","marca":"MARKETING","tarefa":"Implementar pesquisa NPS","obs":"Ferramenta: Typeform ou similar","resp":"Ronaldo F.","p":0.0,"ini":"13/04/2026","fim":"01/05/2026"},{"num":110,"canal":"MATERIAIS DE APOIO","marca":"FCX CONSULTORIA","tarefa":"Criar catálogo de serviços Brasil","obs":"Todos os serviços e verticais","resp":"Ronaldo F.","p":0.0,"ini":"23/03/2026","fim":"24/04/2026"},{"num":111,"canal":"MATERIAIS DE APOIO","marca":"FCX USA","tarefa":"Criar catálogo FCX USA (EN + PT-BR)","obs":"","resp":"Ronaldo F.","p":0.0,"ini":"13/04/2026","fim":"15/05/2026"},{"num":112,"canal":"MATERIAIS DE APOIO","marca":"FCX CONSULTORIA","tarefa":"Criar template da Revista FCX","obs":"Design, seções: mercado, cases, dicas, agenda","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"30/04/2026"},{"num":113,"canal":"MATERIAIS DE APOIO","marca":"FCX CONSULTORIA","tarefa":"Lançar 1ª edição da Revista FCX","obs":"Clientes, parceiros e leads","resp":"Ronaldo F.","p":0.0,"ini":"01/05/2026","fim":"15/05/2026"},{"num":114,"canal":"MATERIAIS DE APOIO","marca":"FCX CONSULTORIA","tarefa":"Publicar edições mensais (mai e jun/26)","obs":"Consistência mensal","resp":"Ronaldo F.","p":0.0,"ini":"15/05/2026","fim":"30/06/2026"},{"num":115,"canal":"MATERIAIS DE APOIO","marca":"FCX USA","tarefa":"Redesenhar cartões de visita (Brasil)","obs":"Todos os sócios — nova identidade","resp":"Ronaldo F.","p":0.0,"ini":"09/03/2026","fim":"31/03/2026"},{"num":116,"canal":"MATERIAIS DE APOIO","marca":"FCX USA","tarefa":"Produzir cartões FCX USA (bilíngue)","obs":"","resp":"Ronaldo F.","p":0.0,"ini":"01/04/2026","fim":"24/04/2026"},{"num":117,"canal":"BRAZILIAN TIMES / FCX USA","marca":"FCX USA","tarefa":"Criar artes para Brazilian Times (anúncios)","obs":"4 Artes para jornal digital e impresso","resp":"Marketing","p":0.3,"ini":"09/03/2026","fim":"23/03/2026"},{"num":118,"canal":"BRAZILIAN TIMES / FCX USA","marca":"FCX USA","tarefa":"Criar artes para Brazilian Times (revista)","obs":"1 Arte para revista mensal","resp":"Marketing","p":0.0,"ini":"09/03/2026","fim":"31/03/2026"},{"num":119,"canal":"BRAZILIAN TIMES / FCX USA","marca":"FCX USA","tarefa":"Criar 05 banners para WhatsApp","obs":"Arte empresarial e pessoa física — protótipo","resp":"Marketing","p":0.3,"ini":"09/03/2026","fim":"26/03/2026"},{"num":120,"canal":"BRAZILIAN TIMES / FCX USA","marca":"FCX USA","tarefa":"Criar 05 banners para Facebook","obs":"Arte empresarial e pessoa física — protótipo","resp":"Marketing","p":0.3,"ini":"09/03/2026","fim":"26/03/2026"},{"num":121,"canal":"BRAZILIAN TIMES / FCX USA","marca":"FCX USA","tarefa":"Criar 05 banners para Instagram","obs":"Arte empresarial e pessoa física — protótipo","resp":"Marketing","p":0.3,"ini":"09/03/2026","fim":"26/03/2026"},{"num":122,"canal":"BRAZILIAN TIMES / FCX USA","marca":"FCX USA","tarefa":"04 vídeos verticais para redes (30s)","obs":"Empresarial e pessoa física — protótipo","resp":"Marcos Cailleaux / Lucas Prattes","p":0.5,"ini":"09/03/2026","fim":"26/03/2026"},{"num":123,"canal":"BRAZILIAN TIMES / FCX USA","marca":"FCX USA","tarefa":"04 vídeos horizontais para redes (30s)","obs":"Empresarial e pessoa física — protótipo","resp":"Marcos Cailleaux / Lucas Prattes","p":0.5,"ini":"09/03/2026","fim":"26/03/2026"},{"num":124,"canal":"BRAZILIAN TIMES / FCX USA","marca":"FCX USA","tarefa":"04 Matérias/artigos (250 palavras)","obs":"Forms para cadastro + QR Code","resp":"Marcos Cailleaux / Lucas Prattes","p":0.0,"ini":"09/03/2026","fim":"27/03/2026"},{"num":125,"canal":"BRAZILIAN TIMES / FCX USA","marca":"FCX USA","tarefa":"05 vinhetas para rádio de 30 segundos","obs":"2 vinhetas gravadas","resp":"Marcos Cailleaux / Lucas Prattes","p":0.3,"ini":"09/03/2026","fim":"26/03/2026"}];
+
+var ALL=[],S={mes:[],st:[],urg:[],marca:[],canal:[]},panelOpen=false,view="t";
+
+function parseCSV(text){
+  var lines=text.trim().split('\n');
+  var headers=lines[0].split(',').map(function(h){return h.trim().replace(/^\"|\"$/g,'');});
+  return lines.slice(1).map(function(line){
+    var fields=[],cur='',inQ=false;
+    for(var i=0;i<line.length;i++){var ch=line[i];if(ch==='"'){inQ=!inQ;}else if(ch===','&&!inQ){fields.push(cur.trim());cur='';}else{cur+=ch;}}
+    fields.push(cur.trim());
+    var obj={};headers.forEach(function(h,i){var v=(fields[i]||'').replace(/^\"|\"$/g,'');obj[h]=h==='p'?parseFloat(v)||0:(h==='num'?parseInt(v)||0:v);});
+    return obj;
+  });
+}
+function initDashboard(RAW){ALL=RAW.map(function(r){var t={num:r.num,canal:r.canal,marca:r.marca,tarefa:r.tarefa,obs:r.obs,resp:r.resp,p:r.p,ini:r.ini,fim:r.fim};t.mes=inferMes(r.ini,r.fim);t.urg=calcUrg(t);return t;});buildSidebar();renderAll();}
+function inferMes(ini,fim){
+  /* BUG FIX 2: "02" (Fevereiro) estava mapeado para "MAR" junto com "03".
+     Corrigido: Fevereiro agora gera label "FEV" separado. */
+  var map={"02":"FEV","03":"MAR","04":"ABR","05":"MAI","06":"JUN"};
+  var ms=[];
+  var gm=function(d){var m=d.match(/(\d{2})\/(\d{2})\/(\d{4})/);return m?m[2]:null;};
+  var s=gm(ini),e=gm(fim);
+  if(!s)return["MAR"];
+  ["02","03","04","05","06"].forEach(function(m){
+    if(map[m]&&m>=s&&(!e||m<=e)&&ms.indexOf(map[m])<0)ms.push(map[m]);
+  });
+  return ms.length?ms:["MAR"];
+}
+function calcUrg(t){
+  /* FEV e MAR = urgência Alta se não concluído */
+  if((t.mes.indexOf("FEV")>=0||t.mes.indexOf("MAR")>=0)&&t.p<1)return"Alta";
+  if(t.mes.indexOf("ABR")>=0&&t.p===0)return"Media";
+  return"Baixa";
+}
+function has(arr,v){return arr.indexOf(v)>=0;}
+function tog2(arr,v){var i=arr.indexOf(v);if(i>=0)arr.splice(i,1);else arr.push(v);}
+function getF(){return ALL.filter(function(t){if(S.mes.length&&!t.mes.some(function(m){return has(S.mes,m);}))return false;if(S.st.length){var s=t.p>=1?"C":t.p>0?"E":"N";if(!has(S.st,s))return false;}if(S.urg.length&&!has(S.urg,t.urg))return false;if(S.marca.length&&!has(S.marca,t.marca))return false;if(S.canal.length&&!has(S.canal,t.canal))return false;return true;});}
+function tog(g,v){tog2(S[g],v);renderAll();}
+function clearAll(){S={mes:[],st:[],urg:[],marca:[],canal:[]};renderAll();}
+function totA(){return S.mes.length+S.st.length+S.urg.length+S.marca.length+S.canal.length;}
+function togglePanel(){panelOpen=!panelOpen;document.getElementById("fpanel").classList.toggle("on",panelOpen);document.getElementById("ftb").classList.toggle("on",panelOpen);}
+function setView(v){view=v;document.getElementById("btat").classList.toggle("on",v==="t");document.getElementById("best").classList.toggle("on",v==="e");document.getElementById("istrip").style.display=v==="e"?"block":"none";renderAll();}
+function setTheme(t){document.body.classList.toggle("light",t==="light");document.getElementById("td").classList.toggle("on",t==="dark");document.getElementById("tl").classList.toggle("on",t==="light");try{localStorage.setItem("fcx-t",t);}catch(e){}}
+try{var _t=localStorage.getItem("fcx-t");if(_t==="light")setTheme("light");}catch(e){}
+function mkChip(g,v,lbl,col,n){var el=document.createElement("div");el.className="chip";el.setAttribute("data-g",g);el.setAttribute("data-v",v);el.innerHTML='<div class="cdot" style="background:'+col+'"></div><span class="clb">'+lbl+'</span><span class="ccn">'+n+'</span>';el.onclick=function(){tog(el.getAttribute("data-g"),el.getAttribute("data-v"));};return el;}
+function buildSidebar(){
+  /* BUG FIX 3: adicionado chip FEV — antes inferMes() gerava "FEV" mas não havia chip para filtrá-lo */
+  [{v:"FEV",l:"Fevereiro",c:"#8b5cf6"},{v:"MAR",l:"Março",c:"var(--v3)"},{v:"ABR",l:"Abril",c:"var(--orn)"},{v:"MAI",l:"Maio",c:"var(--grn)"},{v:"JUN",l:"Junho",c:"var(--yel)"}].forEach(function(m){document.getElementById("fmes").appendChild(mkChip("mes",m.v,m.l,m.c,ALL.filter(function(t){return t.mes.indexOf(m.v)>=0;}).length));});
+  [{v:"C",l:"Concluído",c:"var(--grn)"},{v:"E",l:"Em Andamento",c:"var(--yel)"},{v:"N",l:"Não Iniciado",c:"var(--tm)"}].forEach(function(s){document.getElementById("fst").appendChild(mkChip("st",s.v,s.l,s.c,ALL.filter(function(t){return(t.p>=1?"C":t.p>0?"E":"N")===s.v;}).length));});
+  [{v:"Alta",l:"Alta",c:"var(--red)"},{v:"Media",l:"Média",c:"var(--yel)"},{v:"Baixa",l:"Baixa",c:"var(--grn)"}].forEach(function(u){document.getElementById("furg").appendChild(mkChip("urg",u.v,u.l,u.c,ALL.filter(function(t){return t.urg===u.v;}).length));});
+  var marcas=[];ALL.forEach(function(t){if(marcas.indexOf(t.marca)<0)marcas.push(t.marca);});
+  marcas.forEach(function(m){var lbl=m.length>18?m.slice(0,17)+"…":m;document.getElementById("fmarca").appendChild(mkChip("marca",m,lbl,MC[m]||"var(--v3)",ALL.filter(function(t){return t.marca===m;}).length));});
+  var canais=[];ALL.forEach(function(t){if(canais.indexOf(t.canal)<0)canais.push(t.canal);});
+  canais.forEach(function(c){var lbl=c.length>15?c.slice(0,14)+"…":c;document.getElementById("fcanal").appendChild(mkChip("canal",c,lbl,CC[c]||"var(--v3)",ALL.filter(function(t){return t.canal===c;}).length));});
+}
+function updChips(){var chips=document.querySelectorAll(".chip");for(var i=0;i<chips.length;i++){var el=chips[i],g=el.getAttribute("data-g"),v=el.getAttribute("data-v");el.classList.toggle("on",S[g]&&has(S[g],v));}var n=totA();var bg=document.getElementById("fbg");bg.textContent=n;bg.classList.toggle("show",n>0);}
+function updAbar(){var n=totA();document.getElementById("abar").classList.toggle("show",n>0);var tags=document.getElementById("atags");tags.innerHTML="";var gl={mes:"Mês",st:"Status",urg:"Urgência",marca:"Marca",canal:"Canal"};var stl={C:"Concluído",E:"Em andamento",N:"Não iniciado"};Object.keys(S).forEach(function(g){S[g].forEach(function(v){var tag=document.createElement("div");tag.className="atag";var lbl=(stl[v]||v);if(lbl.length>18)lbl=lbl.slice(0,17)+"…";tag.innerHTML='<span style="opacity:.7;margin-right:2px">'+gl[g]+':</span>'+lbl+'<span class="arm">&#10005;</span>';(function(g2,v2){tag.querySelector(".arm").onclick=function(){tog(g2,v2);};})(g,v);tags.appendChild(tag);});});}
+function pc(p){return p>=1?"var(--grn)":p>=.7?"var(--yel)":p>0?"var(--orn)":"var(--ts)";}
+function si(p){if(p>=1)return{l:"Concluído",c:"var(--grn)",bg:"rgba(62,207,142,.12)"};if(p>0)return{l:"Em andamento",c:"var(--yel)",bg:"rgba(247,213,79,.12)"};return{l:"Não iniciado",c:"var(--tm)",bg:"rgba(122,173,160,.1)"};}
+function renderAll(){var F=getF();updChips();updAbar();rKPI(F);rDonut(F);rCanal(F);rSubcat(F);rTable(F);rTL(F);rResp(F);if(view==="e")rInsights(F);}
+function rKPI(F){
+  var d=0,w=0,n=0,s=0;
+  F.forEach(function(t){if(t.p>=1)d++;else if(t.p>0)w++;else n++;s+=t.p;});
+  var avg=F.length?Math.round(s/F.length*100):0;
+  var tot=ALL.length;
+  var pct=function(x){return F.length?Math.round(x/F.length*100)+"% filtradas":"-";};
+  /* BUG FIX 1: kts nunca era atualizado — agora mostra contexto dinâmico */
+  var ktsEl=document.getElementById("kts");
+  if(ktsEl){
+    ktsEl.textContent=F.length===tot
+      ?"de "+tot+" no plano total"
+      :"filtradas de "+tot+" totais";
+  }
+  document.getElementById("kt").textContent=F.length;
+  document.getElementById("kd").textContent=d; document.getElementById("kds").textContent=pct(d);
+  document.getElementById("kw").textContent=w; document.getElementById("kws").textContent=pct(w);
+  document.getElementById("kn").textContent=n; document.getElementById("kns").textContent=pct(n);
+  document.getElementById("kp").textContent=avg+"%";
+}
+function rDonut(F){var C=276,T=F.length||1,d=0,w=0;F.forEach(function(t){if(t.p>=1)d++;else if(t.p>0)w++;});var n=F.length-d-w;var pd=d/T*C,pw=w/T*C,pn=n/T*C,pct=Math.round((d+w*.5)/T*100);document.getElementById("dtodo").setAttribute("stroke-dasharray",pn+" "+(C-pn));document.getElementById("dtodo").setAttribute("stroke-dashoffset","0");document.getElementById("dwip").setAttribute("stroke-dasharray",pw+" "+(C-pw));document.getElementById("dwip").setAttribute("stroke-dashoffset",-pn);document.getElementById("ddone").setAttribute("stroke-dasharray",pd+" "+(C-pd));document.getElementById("ddone").setAttribute("stroke-dashoffset",-(pn+pw));document.getElementById("dpct").textContent=pct+"%";document.getElementById("ld").textContent=d;document.getElementById("lw").textContent=w;document.getElementById("ln").textContent=n;}
+function rCanal(F){var cnt={};F.forEach(function(t){cnt[t.canal]=(cnt[t.canal]||0)+1;});var s=Object.keys(cnt).map(function(c){return[c,cnt[c]];}).sort(function(a,b){return b[1]-a[1];}).slice(0,10);var mx=s.length?s[0][1]:1;var el=document.getElementById("clist");el.innerHTML=s.length?s.map(function(a){var c=a[0],nn=a[1],col=CC[c]||"var(--v2)",lbl=c.length>17?c.slice(0,16)+"…":c;return'<div class="cr"><div class="cn" title="'+c+'">'+lbl+'</div><div class="cbg"><div class="cb" style="width:'+nn/mx*100+'%;background:'+col+'"></div></div><div class="cc" style="color:'+col+'">'+nn+'</div></div>';}).join(""):"<div style='color:var(--tm);font-size:11px;padding:8px'>Nenhum dado</div>";}
+function rSubcat(F){var map={};F.forEach(function(t){if(!map[t.marca])map[t.marca]={s:0,n:0};map[t.marca].s+=t.p;map[t.marca].n++;});var s=Object.keys(map).map(function(m){return{m:m,avg:map[m].s/map[m].n};}).sort(function(a,b){return b.avg-a.avg;});var el=document.getElementById("pgrid");el.innerHTML=s.length?s.map(function(x){var pct=Math.round(x.avg*100);var col=pct>=80?"var(--grn)":pct>=50?"var(--yel)":pct>0?"var(--orn)":"var(--s3)";var tc=pct>0?"var(--v1)":"transparent";var lbl=x.m.replace("CONTABILIDADE ALAVANCADA","Cont. Alavancada").replace("SUPERMERCADO ALAVANCADO","Supermercado").replace("FCX CONSULTORIA","FCX Consultoria").replace("INDÚSTRIA ALAVANCADA","Indústria Al.");return'<div class="pr"><div class="pl" title="'+x.m+'">'+lbl+'</div><div class="pbg"><div class="pf" style="width:'+pct+'%;background:'+col+';color:'+tc+';min-width:'+(pct>0?"18px":"0")+'">'+( pct>12?pct+"%":"")+'</div></div><div class="pp">'+pct+'%</div></div>';}).join(""):"<div style='color:var(--tm);font-size:11px'>Nenhum dado</div>";}
+function rTable(F){var cnt=F.length;document.getElementById("gcnt").textContent="– "+cnt+" tarefa"+(cnt!==1?"s":"");var b=document.getElementById("gbody");if(!F.length){b.innerHTML='<tr class="nr"><td colspan="9">Nenhuma tarefa encontrada</td></tr>';return;}b.innerHTML=F.map(function(t){var s=si(t.p),col=CC[t.canal]||"var(--v2)",pct=Math.round(t.p*100),p=pc(t.p);var uc=t.urg==="Alta"?"uA":t.urg==="Media"?"uM":"uB";var lm=t.marca.replace("CONTABILIDADE ALAVANCADA","ContAl").replace("SUPERMERCADO ALAVANCADO","Superm.").replace("FCX CONSULTORIA","FCX").replace("INDÚSTRIA ALAVANCADA","Indústria");var lc=t.canal.length>14?t.canal.slice(0,13)+"…":t.canal;return'<tr><td><span class="tn">'+t.num+'</span></td><td><span class="tnm" title="'+t.tarefa+'">'+t.tarefa+'</span></td><td><span class="ctg" style="background:'+col+'22;color:'+col+'">'+lc+'</span></td><td><span style="font-size:9px;color:var(--tm);font-weight:600">'+lm+'</span></td><td><span class="ub '+uc+'">'+t.urg+'</span></td><td><div class="pm"><div class="pmb"><div class="pmf" style="width:'+pct+'%;background:'+p+'"></div></div><span style="font-size:10px;color:'+p+';font-weight:700">'+pct+'%</span></div></td><td><span class="dt">'+t.ini+'</span></td><td><span class="dt">'+t.fim+'</span></td><td><span class="sp" style="background:'+s.bg+';color:'+s.c+'">'+s.l+'</span></td></tr>';}).join("");}
+function rTL(F){var act={};F.forEach(function(t){act[t.canal]=1;});var el=document.getElementById("tlbars");var rows=TLD.filter(function(d){return act[d.c];}).map(function(item){var col=CC[item.c]||"var(--v2)",lbl=item.c.length>15?item.c.slice(0,14)+"…":item.c;return'<div class="tlr"><div class="tll" title="'+item.c+'">'+lbl+'</div><div class="tlt"><div class="tlb" style="left:'+item.s*100+'%;width:'+(item.e-item.s)*100+'%;background:'+col+'88;border-left:2px solid '+col+'"></div></div></div>';});el.innerHTML=rows.length?rows.join(""):"<div style='color:var(--tm);font-size:11px;padding:8px'>Nenhum canal</div>";}
+function rResp(F){var map={};F.forEach(function(t){if(!map[t.resp])map[t.resp]={n:0,s:0};map[t.resp].n++;map[t.resp].s+=t.p;});var el=document.getElementById("rlist");var sorted=Object.keys(map).sort(function(a,b){return map[b].n-map[a].n;});el.innerHTML=sorted.length?sorted.map(function(name){var v=map[name],avg=Math.round(v.s/v.n*100),col=RC[name]||"var(--v3)";var init=name.split(" ").map(function(w){return w[0];}).join("").slice(0,2).toUpperCase();return'<div class="ri"><div class="ra" style="background:'+col+'22;color:'+col+'">'+init+'</div><div style="flex:1"><div class="rn">'+name+'</div><div class="rt">'+v.n+' tarefa'+(v.n!==1?"s":"")+'</div><div style="margin-top:5px;width:100%;height:3px;background:var(--s3);border-radius:2px;overflow:hidden"><div style="width:'+avg+'%;height:100%;background:'+col+';border-radius:2px"></div></div></div><div class="rp" style="color:'+col+'">'+avg+'%</div></div>';}).join(""):"<div style='color:var(--tm);font-size:11px'>—</div>";}
+function rInsights(F){var ua=F.filter(function(t){return t.urg==="Alta";}).length;var d=F.filter(function(t){return t.p>=1;}).length;var s=0;F.forEach(function(t){s+=t.p;});var avg=F.length?Math.round(s/F.length*100):0;var cSet={},mSet={};F.forEach(function(t){cSet[t.canal]=1;mSet[t.marca]=1;});var ins=[{l:"Tarefas Urgentes",v:ua,d:"Ação imediata",c:"var(--red)"},{l:"Taxa de Conclusão",v:d+"/"+F.length,d:"Tarefas finalizadas",c:"var(--grn)"},{l:"Progresso Médio",v:avg+"%",d:"Das filtradas",c:"var(--v3)"},{l:"Canais Ativos",v:Object.keys(cSet).length,d:"Frentes em execução",c:"var(--orn)"},{l:"Marcas Cobertas",v:Object.keys(mSet).length,d:"No filtro atual",c:"#6366f1"}];document.getElementById("icards").innerHTML=ins.map(function(i){return'<div class="ic" style="--ic:'+i.c+'"><div class="il">'+i.l+'</div><div class="iv">'+i.v+'</div><div class="id">'+i.d+'</div></div>';}).join("");}
+
+fetch('dados.csv?v='+Date.now())
+  .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();})
+  .then(function(text){initDashboard(parseCSV(text));})
+  .catch(function(){initDashboard(FALLBACK_RAW);});
+</script>
+</body>
+</html>
